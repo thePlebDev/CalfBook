@@ -25,6 +25,9 @@
         <action
             android:id="@+id/action_createCalf_to_mainFragment"
             app:destination="@id/mainFragment" />
+        <argument
+            android:name="calfId"
+            app:argType="long" />
     </fragment>
     <fragment
         android:id="@+id/editCalf"
@@ -34,5 +37,8 @@
         <action
             android:id="@+id/action_editCalf_to_mainFragment"
             app:destination="@id/mainFragment" />
+        <argument
+            android:name="calfId"
+            app:argType="long" />
     </fragment>
 </navigation>

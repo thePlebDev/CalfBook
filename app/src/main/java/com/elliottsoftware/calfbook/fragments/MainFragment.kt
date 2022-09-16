@@ -8,12 +8,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.elliottsoftware.calfbook.R
 import com.elliottsoftware.calfbook.databinding.FragmentMainBinding
 import com.elliottsoftware.calfbook.recyclerViews.CalfListAdapter
 import com.elliottsoftware.calfbook.util.CalfApplication
+import com.elliottsoftware.calfbook.util.SwipeToDelete
 import com.elliottsoftware.calfbook.viewModles.CalfViewModel
 import com.elliottsoftware.calfbook.viewModles.CalfViewModelFactory
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -64,16 +66,31 @@ class MainFragment : Fragment(),CalfListAdapter.OnCalfListener {
         fabButton.setOnClickListener{
             Navigation.findNavController(it).navigate(R.id.action_mainFragment_to_createCalf)
         }
+
+        ItemTouchHelper(SwipeToDelete(calfViewModel,adapter)).attachToRecyclerView(recyclerView)
     }
 
 
+    /**
+     * sets _binding = null to avoid memory leaks with View Binding
+     */
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 
-    //todo:implement
+
+    /**
+     * method from [CalfListAdapter.OnCalfListener] used to navigate to [UpdateCalfFragment]
+     * @param[calfId] the unique identifier of the calf
+     *
+     * @return
+     */
     override fun onCalfClick(calfId: Long) {
+        //allCalves.value?.get(position) //index of the current calf
+        val action = MainFragmentDirections.actionMainFragmentToEditCalf(calfId)
+
+        Navigation.findNavController(binding.root).navigate(action)
 
     }
 
