@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/mainFragment">
+
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.elliottsoftware.calfbook.fragments.MainFragment"
+        android:label="fragment_main"
+        tools:layout="@layout/fragment_main" >
+        <action
+            android:id="@+id/action_mainFragment_to_editCalf"
+            app:destination="@id/editCalf" />
+        <action
+            android:id="@+id/action_mainFragment_to_createCalf"
+            app:destination="@id/createCalf" />
+    </fragment>
+    <fragment
+        android:id="@+id/createCalf"
+        android:name="com.elliottsoftware.calfbook.fragments.CreateCalf"
+        android:label="fragment_create_calf"
+        tools:layout="@layout/fragment_create_calf" />
+    <fragment
+        android:id="@+id/editCalf"
+        android:name="com.elliottsoftware.calfbook.fragments.EditCalf"
+        android:label="fragment_edit_calf"
+        tools:layout="@layout/fragment_edit_calf" />
+</navigation>
