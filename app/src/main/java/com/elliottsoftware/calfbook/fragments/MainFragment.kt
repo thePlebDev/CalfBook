@@ -1,11 +1,14 @@
 package com.elliottsoftware.calfbook.fragments
 
 import android.os.Bundle
+import android.view.*
+import android.view.inputmethod.EditorInfo
+import androidx.appcompat.widget.SearchView
+import androidx.core.view.MenuHost
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -24,7 +27,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 /**
  * A simple [Fragment] subclass.
  */
-class MainFragment : Fragment(),CalfListAdapter.OnCalfListener {
+class MainFragment : Fragment(),CalfListAdapter.OnCalfListener, MenuProvider,SearchView.OnQueryTextListener {
     private  var _binding:FragmentMainBinding? = null
     //this property is only valid between onCreateView on onDestroy
     private val binding get() = _binding!!
@@ -50,6 +53,8 @@ class MainFragment : Fragment(),CalfListAdapter.OnCalfListener {
         // Inflate the layout for this fragment
         _binding = FragmentMainBinding.inflate(layoutInflater)
         recyclerView = binding.recyclerview
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
         val  view = binding.root
         fabButton = binding.fab
         return view;
@@ -92,6 +97,64 @@ class MainFragment : Fragment(),CalfListAdapter.OnCalfListener {
 
         Navigation.findNavController(binding.root).navigate(action)
 
+    }
+
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.main_menu,menu)
+        val search = menu?.findItem(R.id.menu_search)
+
+        val searchView = search?.actionView as? SearchView
+        searchView?.imeOptions = EditorInfo.IME_FLAG_NO_EXTRACT_UI
+        searchView?.queryHint = "Search Tag Number"
+        searchView?.isSubmitButtonEnabled = true
+        searchView?.setOnQueryTextListener(this)
+    }
+
+    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+        return true
+
+    }
+
+    /**
+     * method from [SearchView.OnQueryTextListener] used to handle search queries
+     * @param[query] the query entered by the user
+     *
+     * @return boolean to deterime if the query was handled properly
+     */
+    //QUERY RELATED METHODS
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        if(query != null){
+            searchDatabase(query)
+        }
+        return true
+    }
+
+    /**
+     * method from [SearchView.OnQueryTextListener] used to handle search queries
+     * @param[query] the query entered by the user
+     *
+     * @return boolean to determine if the query was handled properly
+     */
+    override fun onQueryTextChange(query: String?): Boolean {
+        if(query != null){
+            searchDatabase(query)
+        }
+        return true
+    }
+    /**
+     * private utility method to search the database
+     * @param[query] the query entered by the user
+     *
+     * @return
+     */
+    private fun searchDatabase(query: String){
+        val searchQuery = "%$query%"
+
+        calfViewModel.searchDatabase(searchQuery).observe(this) { list ->
+            list.let {
+                adapter.submitList(it)
+            }
+        }
     }
 
 }
