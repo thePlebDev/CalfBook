@@ -63,9 +63,9 @@ class EditCalf : Fragment() {
         val view = binding.root
         cancelButton = binding.newCalfFabLeft;
         updateButton = binding.newCalfFabRight;
-        updateTagNumber = binding.updateTag
-        updateDetails = binding.updateDescription
-        updateCCIANumber = binding.updateCciaNumber
+        updateTagNumber = binding.editTag
+        updateDetails = binding.editDescription
+        updateCCIANumber = binding.editCciaNumber
         updateSexBULL = binding.radioBull
         updateSexHEIFER = binding.radioHeifer
         return view

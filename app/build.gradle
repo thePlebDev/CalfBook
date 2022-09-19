@@ -89,4 +89,7 @@ dependencies {
     androidTestImplementation ("androidx.test.espresso:espresso-core:$rootProject.espressoVersion", {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+
+    //SlidePlaneLayout
+    implementation "androidx.slidingpanelayout:slidingpanelayout:1.2.0"
 }

@@ -1,5 +1,6 @@
 package com.elliottsoftware.calfbook.fragments
 
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -79,6 +80,15 @@ class CreateCalf : Fragment() {
 
 
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val orientation:Int = resources.configuration.orientation
+        if(orientation == Configuration.ORIENTATION_LANDSCAPE){
+            fabLeft.hide()
+        }
     }
 
     /**
