@@ -1,5 +1,6 @@
 package com.elliottsoftware.calfbook.fragments
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.EditorInfo
@@ -73,6 +74,13 @@ class MainFragment : Fragment(),CalfListAdapter.OnCalfListener, MenuProvider,Sea
         }
 
         ItemTouchHelper(SwipeToDelete(calfViewModel,adapter)).attachToRecyclerView(recyclerView)
+
+        val orientation:Int = resources.configuration.orientation
+        if(orientation == Configuration.ORIENTATION_LANDSCAPE){
+            fabButton.hide()
+        }
+
+
     }
 
 
