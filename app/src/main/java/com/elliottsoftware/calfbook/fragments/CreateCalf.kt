@@ -125,7 +125,7 @@ class CreateCalf : Fragment() {
             val snackBar = Snackbar.make(view,"Calf $tagNumber created", Snackbar.LENGTH_LONG)
             snackBar.setAction("DISMISS", SnackBarActions(snackBar))
             snackBar.show()
-            
+
             if(!isOrientationLandScape()){
                 Navigation.findNavController(view).navigate(R.id.action_createCalf_to_mainFragment)
             }
