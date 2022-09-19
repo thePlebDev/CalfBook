@@ -86,8 +86,8 @@ class CreateCalf : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val orientation:Int = resources.configuration.orientation
-        if(orientation == Configuration.ORIENTATION_LANDSCAPE){
+
+        if(isOrientationLandScape()){
             fabLeft.hide()
         }
     }
@@ -125,9 +125,19 @@ class CreateCalf : Fragment() {
             val snackBar = Snackbar.make(view,"Calf $tagNumber created", Snackbar.LENGTH_LONG)
             snackBar.setAction("DISMISS", SnackBarActions(snackBar))
             snackBar.show()
-            Navigation.findNavController(view).navigate(R.id.action_createCalf_to_mainFragment)
+            
+            if(!isOrientationLandScape()){
+                Navigation.findNavController(view).navigate(R.id.action_createCalf_to_mainFragment)
+            }
+
         }
     }
 
-
+    private fun isOrientationLandScape():Boolean{
+        val orientation:Int = resources.configuration.orientation
+        if(orientation == Configuration.ORIENTATION_LANDSCAPE){
+            return true
+        }
+        return false
+    }
 }
