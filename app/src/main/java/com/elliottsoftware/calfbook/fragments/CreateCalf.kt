@@ -15,6 +15,7 @@ import com.elliottsoftware.calfbook.databinding.FragmentCreateCalfBinding
 import com.elliottsoftware.calfbook.models.Calf
 import com.elliottsoftware.calfbook.util.CalfApplication
 import com.elliottsoftware.calfbook.util.CalfUtil
+import com.elliottsoftware.calfbook.util.SnackBarActions
 import com.elliottsoftware.calfbook.viewModles.CalfViewModel
 import com.elliottsoftware.calfbook.viewModles.CalfViewModelFactory
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -121,9 +122,9 @@ class CreateCalf : Fragment() {
         if(!CalfUtil.validateTagNumber(tagNumber,this.tagNumber)){
             // this should run if the tagNumber is not empty
             calfViewModel.insert(Calf(tagNumber,cciaNumber,sex,details, Date()))
-            //val snackBar = Snackbar.make(view,"Calf $tagNumber created", Snackbar.LENGTH_LONG)
-//            snackBar.setAction("DISMISS",SnackBarActions(snackBar))
-//            snackBar.show()
+            val snackBar = Snackbar.make(view,"Calf $tagNumber created", Snackbar.LENGTH_LONG)
+            snackBar.setAction("DISMISS", SnackBarActions(snackBar))
+            snackBar.show()
             Navigation.findNavController(view).navigate(R.id.action_createCalf_to_mainFragment)
         }
     }
