@@ -1,4 +1,4 @@
-# Calf bBook
+# Calf Book
 
 - This app was created to provide farmers with a free alternative to other apps available on the market. 
 If you have any suggestions on features you would like to see, please reach out and create an issue. I am currently working on inegrating Firebase authentication and
