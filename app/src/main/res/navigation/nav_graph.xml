@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/mainFragment">
+    app:startDestination="@id/login">
 
     <fragment
         android:id="@+id/mainFragment"
@@ -40,5 +40,22 @@
         <argument
             android:name="calfId"
             app:argType="long" />
+    </fragment>
+    <fragment
+        android:id="@+id/register3"
+        android:name="com.elliottsoftware.calfbook.fragments.Register"
+        android:label="Register" >
+        <action
+            android:id="@+id/action_register3_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/login"
+        android:name="com.elliottsoftware.calfbook.fragments.Login"
+        android:label="fragment_register"
+        tools:layout="@layout/fragment_register" >
+        <action
+            android:id="@+id/action_login_to_register3"
+            app:destination="@id/register3" />
     </fragment>
 </navigation>
