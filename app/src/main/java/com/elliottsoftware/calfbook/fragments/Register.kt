@@ -11,12 +11,19 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.navigation.Navigation
 import com.elliottsoftware.calfbook.R
 import com.elliottsoftware.calfbook.databinding.FragmentRegisterBinding
 import com.elliottsoftware.calfbook.models.firebase.User
+import com.elliottsoftware.calfbook.util.SnackBarActions
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ktx.database
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 
 /**
  * A simple [Fragment] subclass.
@@ -32,11 +39,14 @@ class Register : Fragment() ,View.OnClickListener{
     private lateinit var auth: FirebaseAuth
     private lateinit var registerUser:Button
     private lateinit var progressBar:ProgressBar
+    private lateinit var database: DatabaseReference
+   val db = Firebase.firestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // Initialize Firebase Auth
         auth = Firebase.auth
+
 
     }
 
@@ -53,6 +63,7 @@ class Register : Fragment() ,View.OnClickListener{
         password = binding.password
         registerUser = binding.registerButton
         progressBar = binding.progressBar
+        database = Firebase.database.reference
         registerUser.setOnClickListener(this)
 
         return view
@@ -66,11 +77,11 @@ class Register : Fragment() ,View.OnClickListener{
 
     private fun checkClicked(view:View?):Unit{
         when(view?.id){
-            R.id.registerButton -> registerUser()
+            R.id.registerButton -> registerUser(view!!)
         }
     }
 
-    private fun registerUser():Unit{
+    private fun registerUser(view:View):Unit{
         val email = this.email.text.toString().trim()
         val username = this.username.text.toString().trim()
         val password = this.password.text.toString().trim()
@@ -101,7 +112,7 @@ class Register : Fragment() ,View.OnClickListener{
             return
         }
         progressBar.visibility = View.VISIBLE
-        createAccount(email,password,username)
+        createAccount(email,password,username,view)
 
     }
 
@@ -109,21 +120,36 @@ class Register : Fragment() ,View.OnClickListener{
         super.onDestroyView()
         _binding = null
     }
-    private fun createAccount(email: String, password: String,username: String) {
+    private fun createAccount(email: String, password: String,username:String,view: View) {
         // [START create_user_with_email]
         activity?.let {
             auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(it) { task ->
                     if (task.isSuccessful) {
                         // Sign in success, update UI with the signed-in user's information
-                        Toast.makeText(it,"USER CREATED",Toast.LENGTH_LONG).show()
+
                        progressBar.visibility = View.INVISIBLE
-                        val user = auth.currentUser
+                        val snackBar = Snackbar.make(view,"Account created", Snackbar.LENGTH_LONG)
+                        snackBar.setAction("DISMISS", SnackBarActions(snackBar))
+                        snackBar.show()
+                        //CREATE THE USER AND SAVE IT TO THE DATABASE
+                        val user = User(username,email)
+                        db.collection("users")
+                            .add(user)
+
+
+
+                        //NAVIGATE TO THE HOME PAGE
+                        Navigation.findNavController(view).navigate(R.id.action_register3_to_mainFragment)
+                       // val user = auth.currentUser
+                       // user?.uid
 
                     } else {
                         // If sign in fails, display a message to the user.
                         progressBar.visibility = View.INVISIBLE
-                        Toast.makeText(it,"NOT CREATED",Toast.LENGTH_LONG).show()
+                        val snackBar = Snackbar.make(view,"Error, please try again", Snackbar.LENGTH_LONG)
+                        snackBar.setAction("DISMISS", SnackBarActions(snackBar))
+                        snackBar.show()
 
 
                     }
