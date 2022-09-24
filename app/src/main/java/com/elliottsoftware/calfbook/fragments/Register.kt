@@ -24,6 +24,7 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.runBlocking
 
 /**
  * A simple [Fragment] subclass.
@@ -40,7 +41,7 @@ class Register : Fragment() ,View.OnClickListener{
     private lateinit var registerUser:Button
     private lateinit var progressBar:ProgressBar
     private lateinit var database: DatabaseReference
-   val db = Firebase.firestore
+   private val db = Firebase.firestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -126,28 +127,23 @@ class Register : Fragment() ,View.OnClickListener{
             auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(it) { task ->
                     if (task.isSuccessful) {
-                        // Sign in success, update UI with the signed-in user's information
+                        // Sign in success, update UI and register the user
 
-                       progressBar.visibility = View.INVISIBLE
-                        val snackBar = Snackbar.make(view,"Account created", Snackbar.LENGTH_LONG)
-                        snackBar.setAction("DISMISS", SnackBarActions(snackBar))
-                        snackBar.show()
-                        //CREATE THE USER AND SAVE IT TO THE DATABASE
-                        val user = User(username,email)
-                        db.collection("users")
-                            .add(user)
-
+                        addUserToCloudDatabase(username,email,view)
 
 
                         //NAVIGATE TO THE HOME PAGE
                         Navigation.findNavController(view).navigate(R.id.action_register3_to_mainFragment)
                        // val user = auth.currentUser
                        // user?.uid
+                    }
 
-                    } else {
+
+                    else {
                         // If sign in fails, display a message to the user.
                         progressBar.visibility = View.INVISIBLE
-                        val snackBar = Snackbar.make(view,"Error, please try again", Snackbar.LENGTH_LONG)
+
+                        val snackBar = Snackbar.make(view,task.exception?.message.toString(), Snackbar.LENGTH_LONG)
                         snackBar.setAction("DISMISS", SnackBarActions(snackBar))
                         snackBar.show()
 
@@ -156,5 +152,19 @@ class Register : Fragment() ,View.OnClickListener{
                 }
         }
         // [END create_user_with_email]
+    }
+
+    private fun addUserToCloudDatabase(username:String, email: String,view:View){
+        progressBar.visibility = View.INVISIBLE
+        val snackBar = Snackbar.make(view,"Account created", Snackbar.LENGTH_LONG)
+        snackBar.setAction("DISMISS", SnackBarActions(snackBar))
+        snackBar.show()
+        //CREATE THE USER AND SAVE IT TO THE DATABASE
+        val user = User(username,email)
+        val documentReference = db.collection("users").document(email)
+            .set(user)
+            .addOnSuccessListener { documentReference ->
+                Log.d("MEATBALL", "DocumentSnapshot added with ID: $documentReference")
+            }
     }
 }

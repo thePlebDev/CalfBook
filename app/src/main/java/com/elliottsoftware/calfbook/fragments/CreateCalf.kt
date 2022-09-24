@@ -13,6 +13,7 @@ import androidx.navigation.Navigation
 import com.elliottsoftware.calfbook.R
 import com.elliottsoftware.calfbook.databinding.FragmentCreateCalfBinding
 import com.elliottsoftware.calfbook.models.Calf
+import com.elliottsoftware.calfbook.models.firebase.FireBaseCalf
 import com.elliottsoftware.calfbook.util.CalfApplication
 import com.elliottsoftware.calfbook.util.CalfUtil
 import com.elliottsoftware.calfbook.util.SnackBarActions
@@ -20,6 +21,10 @@ import com.elliottsoftware.calfbook.viewModles.CalfViewModel
 import com.elliottsoftware.calfbook.viewModles.CalfViewModelFactory
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import java.util.*
 
 
@@ -43,10 +48,13 @@ class CreateCalf : Fragment() {
     private lateinit var heifer: RadioButton
     private lateinit var calfDate: Date
     private lateinit var fabLeft: FloatingActionButton
+    private val db = Firebase.firestore
+    private lateinit var auth: FirebaseAuth
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        auth = Firebase.auth
 
     }
 
@@ -125,6 +133,9 @@ class CreateCalf : Fragment() {
             val snackBar = Snackbar.make(view,"Calf $tagNumber created", Snackbar.LENGTH_LONG)
             snackBar.setAction("DISMISS", SnackBarActions(snackBar))
             snackBar.show()
+            val fireBaseCalf = FireBaseCalf(tagNumber,cciaNumber,sex,details, Date())
+            db.collection("users").document(auth.currentUser?.email!!)
+                .collection("calves").document(cciaNumber).set(fireBaseCalf)
 
             if(!isOrientationLandScape()){
                 Navigation.findNavController(view).navigate(R.id.action_createCalf_to_mainFragment)
