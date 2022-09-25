@@ -8,6 +8,9 @@ import android.view.ViewGroup
 import androidx.navigation.Navigation
 import com.elliottsoftware.calfbook.R
 import com.elliottsoftware.calfbook.databinding.FragmentLoginBinding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 
 /**
@@ -17,11 +20,13 @@ class Login : Fragment() {
     private var _binding: FragmentLoginBinding? = null
     //this property is only valid between onCreateView() and onDestroyView()
     private val binding get() = _binding!!
+    private lateinit var auth: FirebaseAuth
 
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        auth = Firebase.auth
 
     }
 
@@ -39,6 +44,15 @@ class Login : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.register.setOnClickListener{
             Navigation.findNavController(binding.root).navigate(R.id.action_login_to_register3)
+        }
+    }
+
+    public override fun onStart() {
+        super.onStart()
+        // Check if user is signed in (non-null) and update UI accordingly.
+        val currentUser = auth.currentUser
+        if(currentUser != null){
+            Navigation.findNavController(view!!).navigate(R.id.action_login_to_mainFragment)
         }
     }
 

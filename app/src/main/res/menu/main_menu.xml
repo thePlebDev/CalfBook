@@ -11,5 +11,12 @@
         app:showAsAction="ifRoom"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         tools:targetApi="o"/>
+    <item android:id="@+id/logout"
+        android:icon="@drawable/ic_logout"
+        android:iconTint="@color/white"
+        android:iconTintMode="@color/white"
+        android:title="@string/logout"
+        app:showAsAction="ifRoom"
+        />
 
 </menu>
