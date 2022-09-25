@@ -2,6 +2,7 @@ package com.elliottsoftware.calfbook.fragments
 
 import android.content.res.Configuration
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.view.inputmethod.EditorInfo
 import androidx.appcompat.widget.SearchView
@@ -23,6 +24,9 @@ import com.elliottsoftware.calfbook.util.SwipeToDelete
 import com.elliottsoftware.calfbook.viewModles.CalfViewModel
 import com.elliottsoftware.calfbook.viewModles.CalfViewModelFactory
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 
 /**
@@ -33,6 +37,7 @@ class MainFragment : Fragment(),CalfListAdapter.OnCalfListener, MenuProvider,Sea
     //this property is only valid between onCreateView on onDestroy
     private val binding get() = _binding!!
     private lateinit var fabButton: FloatingActionButton
+    private lateinit var auth: FirebaseAuth
     private val calfViewModel: CalfViewModel by viewModels {
         CalfViewModelFactory((activity?.application as CalfApplication).repository)
     }
@@ -44,6 +49,8 @@ class MainFragment : Fragment(),CalfListAdapter.OnCalfListener, MenuProvider,Sea
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Initialize Firebase Auth
+        auth = Firebase.auth
 
     }
 
@@ -112,6 +119,9 @@ class MainFragment : Fragment(),CalfListAdapter.OnCalfListener, MenuProvider,Sea
         val search = menu?.findItem(R.id.menu_search)
 
         val searchView = search?.actionView as? SearchView
+        val logoutButton = menu.findItem(R.id.logout)
+        Log.e("IT WAS INFLATED","INFLATED THE MF")
+
         searchView?.imeOptions = EditorInfo.IME_FLAG_NO_EXTRACT_UI
         searchView?.queryHint = "Search Tag Number"
         searchView?.isSubmitButtonEnabled = true
@@ -119,7 +129,15 @@ class MainFragment : Fragment(),CalfListAdapter.OnCalfListener, MenuProvider,Sea
     }
 
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-        return true
+
+        return when (menuItem.itemId) {
+            R.id.logout -> {
+                auth.signOut()
+                Navigation.findNavController(view!!).navigate(R.id.action_mainFragment_to_login)
+                true
+            }
+            else -> return false
+        }
 
     }
 
@@ -164,5 +182,6 @@ class MainFragment : Fragment(),CalfListAdapter.OnCalfListener, MenuProvider,Sea
             }
         }
     }
+
 
 }

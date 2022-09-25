@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_mainFragment_to_createCalf"
             app:destination="@id/createCalf" />
+        <action
+            android:id="@+id/action_mainFragment_to_login"
+            app:destination="@id/login" />
     </fragment>
     <fragment
         android:id="@+id/createCalf"
@@ -57,5 +60,8 @@
         <action
             android:id="@+id/action_login_to_register3"
             app:destination="@id/register3" />
+        <action
+            android:id="@+id/action_login_to_mainFragment"
+            app:destination="@id/mainFragment" />
     </fragment>
 </navigation>
