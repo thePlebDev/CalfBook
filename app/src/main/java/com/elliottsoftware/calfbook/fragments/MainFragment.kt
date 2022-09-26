@@ -88,7 +88,7 @@ class MainFragment : Fragment(),CalfListAdapter.OnCalfListener, MenuProvider,Sea
             Navigation.findNavController(it).navigate(R.id.action_mainFragment_to_createCalf)
         }
 
-   //     ItemTouchHelper(SwipeToDelete(calfViewModel,adapter)).attachToRecyclerView(recyclerView)
+       ItemTouchHelper(SwipeToDelete(adapter)).attachToRecyclerView(recyclerView)
 
         val orientation:Int = resources.configuration.orientation
         if(orientation == Configuration.ORIENTATION_LANDSCAPE){
