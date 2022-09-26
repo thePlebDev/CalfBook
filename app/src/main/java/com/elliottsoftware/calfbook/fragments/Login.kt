@@ -1,5 +1,7 @@
 package com.elliottsoftware.calfbook.fragments
 
+import android.content.pm.ActivityInfo
+import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Patterns
 import androidx.fragment.app.Fragment
@@ -34,6 +36,7 @@ class Login : Fragment(), View.OnClickListener{
 
 
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         auth = Firebase.auth
@@ -51,6 +54,8 @@ class Login : Fragment(), View.OnClickListener{
         password = binding.password
         loginButton =binding.loginButton
         progressBar = binding.progressBar
+        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+
         return view
     }
 

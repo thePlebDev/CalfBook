@@ -1,5 +1,7 @@
 package com.elliottsoftware.calfbook.fragments
 
+import android.content.pm.ActivityInfo
+import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
@@ -41,6 +43,7 @@ class Register : Fragment() ,View.OnClickListener{
     private lateinit var registerUser:Button
     private lateinit var progressBar:ProgressBar
     private lateinit var database: DatabaseReference
+
    private val db = Firebase.firestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,6 +69,8 @@ class Register : Fragment() ,View.OnClickListener{
         progressBar = binding.progressBar
         database = Firebase.database.reference
         registerUser.setOnClickListener(this)
+
+        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
         return view
     }
