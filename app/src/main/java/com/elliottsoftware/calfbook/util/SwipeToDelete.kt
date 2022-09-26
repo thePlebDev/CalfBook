@@ -5,9 +5,10 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.elliottsoftware.calfbook.R
 import com.elliottsoftware.calfbook.recyclerViews.CalfListAdapter
+import com.elliottsoftware.calfbook.recyclerViews.FirestoreAdapter
 import com.elliottsoftware.calfbook.viewModles.CalfViewModel
 
-class SwipeToDelete(private val calfViewModel: CalfViewModel, private val calfListAdapter: CalfListAdapter):
+class SwipeToDelete(private val fireStoreAdapter: FirestoreAdapter):
     ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
     override fun onMove(
         recyclerView: RecyclerView,
@@ -20,8 +21,9 @@ class SwipeToDelete(private val calfViewModel: CalfViewModel, private val calfLi
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
 
-        val calf  = calfListAdapter.currentList[viewHolder.adapterPosition]
-        calfViewModel.delete(calf)
+       // val calf  = calfListAdapter.currentList[viewHolder.adapterPosition]
+        fireStoreAdapter.snapshots.getSnapshot(viewHolder.bindingAdapterPosition).reference.delete()
+       // calfViewModel.delete(calf)
 
 
         //snackBarCreation.createSnackbarCalfDeleted(Globalview)

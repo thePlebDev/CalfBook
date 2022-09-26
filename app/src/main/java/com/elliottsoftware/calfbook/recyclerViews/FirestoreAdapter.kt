@@ -45,6 +45,7 @@ class FirestoreViewHolder(calfView: View):RecyclerView.ViewHolder(calfView){
         dateView.text = simpleDateFormat.format(calf.date)
         details.text = calf.details
         sex.text = calf.sex;
+
     }
 
     companion object{
