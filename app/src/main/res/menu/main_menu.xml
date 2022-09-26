@@ -3,14 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:imeOptions="flagNoExtractUi">
-    <item android:id="@+id/menu_search"
-        android:imeOptions="flagNoExtractUi"
-        android:title="search"
-        android:icon="@drawable/ic_baseline_search_24"
-        android:iconTint="@color/white"
-        app:showAsAction="ifRoom"
-        app:actionViewClass="androidx.appcompat.widget.SearchView"
-        tools:targetApi="o"/>
+
     <item android:id="@+id/logout"
         android:icon="@drawable/ic_logout"
         android:iconTint="@color/white"

@@ -38,7 +38,7 @@ import com.google.firebase.firestore.Query;
 /**
  * A simple [Fragment] subclass.
  */
-class MainFragment : Fragment(),CalfListAdapter.OnCalfListener, MenuProvider,SearchView.OnQueryTextListener {
+class MainFragment : Fragment(),CalfListAdapter.OnCalfListener, MenuProvider {
     private  var _binding:FragmentMainBinding? = null
     //this property is only valid between onCreateView on onDestroy
     private val binding get() = _binding!!
@@ -125,14 +125,8 @@ class MainFragment : Fragment(),CalfListAdapter.OnCalfListener, MenuProvider,Sea
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.main_menu,menu)
-        val search = menu?.findItem(R.id.menu_search)
 
-        val searchView = search?.actionView as? SearchView
 
-        searchView?.imeOptions = EditorInfo.IME_FLAG_NO_EXTRACT_UI
-        searchView?.queryHint = "Search Tag Number"
-        searchView?.isSubmitButtonEnabled = true
-        searchView?.setOnQueryTextListener(this)
     }
 
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
@@ -148,47 +142,7 @@ class MainFragment : Fragment(),CalfListAdapter.OnCalfListener, MenuProvider,Sea
 
     }
 
-    /**
-     * method from [SearchView.OnQueryTextListener] used to handle search queries
-     * @param[query] the query entered by the user
-     *
-     * @return boolean to deterime if the query was handled properly
-     */
-    //QUERY RELATED METHODS
-    override fun onQueryTextSubmit(query: String?): Boolean {
-        if(query != null){
-            searchDatabase(query)
-        }
-        return true
-    }
 
-    /**
-     * method from [SearchView.OnQueryTextListener] used to handle search queries
-     * @param[query] the query entered by the user
-     *
-     * @return boolean to determine if the query was handled properly
-     */
-    override fun onQueryTextChange(query: String?): Boolean {
-        if(query != null){
-            searchDatabase(query)
-        }
-        return true
-    }
-    /**
-     * private utility method to search the database
-     * @param[query] the query entered by the user
-     *
-     * @return
-     */
-    private fun searchDatabase(query: String){
-        val searchQuery = "%$query%"
-
-//        calfViewModel.searchDatabase(searchQuery).observe(this) { list ->
-//            list.let {
-//                adapter.submitList(it)
-//            }
-//        }
-    }
 
 
     private fun setUpRecyclerView():Unit{
