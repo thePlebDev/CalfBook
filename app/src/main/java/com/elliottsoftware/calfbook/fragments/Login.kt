@@ -1,13 +1,19 @@
 package com.elliottsoftware.calfbook.fragments
 
 import android.os.Bundle
+import android.util.Patterns
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ProgressBar
 import androidx.navigation.Navigation
 import com.elliottsoftware.calfbook.R
 import com.elliottsoftware.calfbook.databinding.FragmentLoginBinding
+import com.elliottsoftware.calfbook.util.SnackBarActions
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -16,10 +22,14 @@ import com.google.firebase.ktx.Firebase
 /**
  * A simple [Fragment] subclass.
  */
-class Login : Fragment() {
+class Login : Fragment(), View.OnClickListener{
     private var _binding: FragmentLoginBinding? = null
     //this property is only valid between onCreateView() and onDestroyView()
     private val binding get() = _binding!!
+    private lateinit var email:EditText
+    private lateinit var password:EditText
+    private lateinit var loginButton:Button
+    private lateinit var progressBar: ProgressBar
     private lateinit var auth: FirebaseAuth
 
 
@@ -37,6 +47,10 @@ class Login : Fragment() {
         // Inflate the layout for this fragment
         _binding = FragmentLoginBinding.inflate(inflater,container,false)
         val view = binding.root
+        email = binding.email;
+        password = binding.password
+        loginButton =binding.loginButton
+        progressBar = binding.progressBar
         return view
     }
 
@@ -45,9 +59,10 @@ class Login : Fragment() {
         binding.register.setOnClickListener{
             Navigation.findNavController(binding.root).navigate(R.id.action_login_to_register3)
         }
+        loginButton.setOnClickListener(this)
     }
 
-    public override fun onStart() {
+     override fun onStart() {
         super.onStart()
         // Check if user is signed in (non-null) and update UI accordingly.
         val currentUser = auth.currentUser
@@ -59,6 +74,55 @@ class Login : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onClick(p0: View?):Unit {
+        //VALIDATE EMAIL, NOT NULL AND EMAIL
+        //VALIDATE PASSWORD IS NOT NULL
+        val email = this.email.text.toString().trim()
+        val password = this.password.text.toString().trim()
+        if(email.isEmpty()){
+            this.email.error = "Email required"
+            this.email.requestFocus()
+            return
+        }
+        if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+            this.email.error = "Please provide valid email"
+            this.email.requestFocus()
+            return
+        }
+        if(password.isEmpty()){
+            this.password.error = "Password required"
+            this.password.requestFocus()
+            return
+        }
+        progressBar.visibility = View.VISIBLE
+        signinUser(email,password)
+
+    }
+
+    private fun signinUser(email:String,password:String){
+        activity?.let {
+            auth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(it) { task ->
+                    if (task.isSuccessful) {
+                        progressBar.visibility = View.INVISIBLE
+                        // Sign in success, update UI with the signed-in user's information
+
+                        Navigation.findNavController(view!!).navigate(R.id.action_login_to_mainFragment)
+
+                        val user = auth.currentUser
+
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        progressBar.visibility = View.INVISIBLE
+                        val snackBar = Snackbar.make(view!!,"Authentication failed", Snackbar.LENGTH_LONG)
+                        snackBar.setAction("DISMISS", SnackBarActions(snackBar))
+                        snackBar.show()
+
+                    }
+                }
+        }
     }
 
 }

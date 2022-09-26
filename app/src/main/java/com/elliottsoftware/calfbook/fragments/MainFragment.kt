@@ -2,13 +2,12 @@ package com.elliottsoftware.calfbook.fragments
 
 import android.content.res.Configuration
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.view.inputmethod.EditorInfo
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.MenuHost
-import androidx.fragment.app.Fragment
 import androidx.core.view.MenuProvider
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
@@ -18,15 +17,22 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.elliottsoftware.calfbook.R
 import com.elliottsoftware.calfbook.databinding.FragmentMainBinding
+import com.elliottsoftware.calfbook.models.firebase.FireBaseCalf
 import com.elliottsoftware.calfbook.recyclerViews.CalfListAdapter
+import com.elliottsoftware.calfbook.recyclerViews.FirestoreAdapter
 import com.elliottsoftware.calfbook.util.CalfApplication
 import com.elliottsoftware.calfbook.util.SwipeToDelete
 import com.elliottsoftware.calfbook.viewModles.CalfViewModel
 import com.elliottsoftware.calfbook.viewModles.CalfViewModelFactory
+import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.firestore.Query;
 
 
 /**
@@ -37,20 +43,21 @@ class MainFragment : Fragment(),CalfListAdapter.OnCalfListener, MenuProvider,Sea
     //this property is only valid between onCreateView on onDestroy
     private val binding get() = _binding!!
     private lateinit var fabButton: FloatingActionButton
-    private lateinit var auth: FirebaseAuth
+    private var auth: FirebaseAuth = Firebase.auth
+    private val db = FirebaseFirestore.getInstance()
+    private val collectionRef: CollectionReference = db.collection("users").document(auth.currentUser?.email!!)
+        .collection("calves")
     private val calfViewModel: CalfViewModel by viewModels {
         CalfViewModelFactory((activity?.application as CalfApplication).repository)
     }
-
-
+    private lateinit var adapter: FirestoreAdapter
     private lateinit var recyclerView: RecyclerView
-    private val adapter = CalfListAdapter(this)
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Initialize Firebase Auth
-        auth = Firebase.auth
+
 
     }
 
@@ -71,21 +78,23 @@ class MainFragment : Fragment(),CalfListAdapter.OnCalfListener, MenuProvider,Sea
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(activity)
-        calfViewModel.allCalves.observe(viewLifecycleOwner, Observer { calves ->
-            calves?.let{adapter.submitList(it)}
-        })
+
+
+        setUpRecyclerView();
+
+
+
         fabButton.setOnClickListener{
             Navigation.findNavController(it).navigate(R.id.action_mainFragment_to_createCalf)
         }
 
-        ItemTouchHelper(SwipeToDelete(calfViewModel,adapter)).attachToRecyclerView(recyclerView)
+   //     ItemTouchHelper(SwipeToDelete(calfViewModel,adapter)).attachToRecyclerView(recyclerView)
 
         val orientation:Int = resources.configuration.orientation
         if(orientation == Configuration.ORIENTATION_LANDSCAPE){
             fabButton.hide()
         }
+
 
 
     }
@@ -119,8 +128,6 @@ class MainFragment : Fragment(),CalfListAdapter.OnCalfListener, MenuProvider,Sea
         val search = menu?.findItem(R.id.menu_search)
 
         val searchView = search?.actionView as? SearchView
-        val logoutButton = menu.findItem(R.id.logout)
-        Log.e("IT WAS INFLATED","INFLATED THE MF")
 
         searchView?.imeOptions = EditorInfo.IME_FLAG_NO_EXTRACT_UI
         searchView?.queryHint = "Search Tag Number"
@@ -176,12 +183,31 @@ class MainFragment : Fragment(),CalfListAdapter.OnCalfListener, MenuProvider,Sea
     private fun searchDatabase(query: String){
         val searchQuery = "%$query%"
 
-        calfViewModel.searchDatabase(searchQuery).observe(this) { list ->
-            list.let {
-                adapter.submitList(it)
-            }
-        }
+//        calfViewModel.searchDatabase(searchQuery).observe(this) { list ->
+//            list.let {
+//                adapter.submitList(it)
+//            }
+//        }
     }
 
 
+    private fun setUpRecyclerView():Unit{
+         val options: FirestoreRecyclerOptions<FireBaseCalf> = FirestoreRecyclerOptions.Builder<FireBaseCalf>()
+            .setQuery(collectionRef, FireBaseCalf::class.java)
+            .build()
+        adapter = FirestoreAdapter(options)
+        recyclerView.layoutManager = LinearLayoutManager(activity)
+        recyclerView.adapter = adapter
+
+    }
+
+    override fun onStart() {
+        super.onStart()
+        adapter.startListening();
+    }
+
+    override fun onStop() {
+        super.onStop()
+        adapter.stopListening()
+    }
 }
