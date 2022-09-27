@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.navigation.Navigation
 import com.elliottsoftware.calfbook.R
 import com.elliottsoftware.calfbook.databinding.FragmentLoginBinding
@@ -31,6 +32,8 @@ class Login : Fragment(), View.OnClickListener{
     private lateinit var email:EditText
     private lateinit var password:EditText
     private lateinit var loginButton:Button
+    private lateinit var register:TextView
+    private lateinit var forgotPassword:TextView
     private lateinit var progressBar: ProgressBar
     private lateinit var auth: FirebaseAuth
 
@@ -54,15 +57,21 @@ class Login : Fragment(), View.OnClickListener{
         password = binding.password
         loginButton =binding.loginButton
         progressBar = binding.progressBar
+        forgotPassword = binding.forgotPassword
+        register = binding.register
         activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
         return view
     }
 
+    //TODO: REFACTOR SO WE HAVE SEPARATE ONCLICK LISTENERS.
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.register.setOnClickListener{
+        register.setOnClickListener{
             Navigation.findNavController(binding.root).navigate(R.id.action_login_to_register3)
+        }
+        forgotPassword.setOnClickListener{
+            Navigation.findNavController(binding.root).navigate(R.id.action_login_to_forgotPassword2)
         }
         loginButton.setOnClickListener(this)
     }
