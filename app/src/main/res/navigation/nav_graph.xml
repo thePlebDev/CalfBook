@@ -63,5 +63,12 @@
         <action
             android:id="@+id/action_login_to_mainFragment"
             app:destination="@id/mainFragment" />
+        <action
+            android:id="@+id/action_login_to_forgotPassword2"
+            app:destination="@id/forgotPassword2" />
     </fragment>
+    <fragment
+        android:id="@+id/forgotPassword2"
+        android:name="com.elliottsoftware.calfbook.fragments.ForgotPassword"
+        android:label="ForgotPassword" />
 </navigation>
