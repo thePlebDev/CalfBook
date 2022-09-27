@@ -13,11 +13,12 @@
 
         <EditText
             android:imeOptions="flagNoExtractUi"
-            android:id="@+id/edit_tag"
+            android:id="@+id/edit_calf_tag"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Tag Number"
+            android:hint="Calf Tag Number"
             android:inputType="text"/>
+
         <EditText
             android:imeOptions="flagNoExtractUi"
             android:id="@+id/edit_cciaNumber"
@@ -33,6 +34,20 @@
             android:layout_height="wrap_content"
             android:hint="Description"
             android:inputType="text"/>
+        <EditText
+            android:imeOptions="flagNoExtractUi"
+            android:id="@+id/edit_cow_tag"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Cow Tag Number"
+            android:inputType="text"/>
+        <EditText
+            android:imeOptions="flagNoExtractUi"
+            android:id="@+id/edit_birthWeight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Birth weight"
+            android:inputType="number"/>
 
         <RadioGroup
             android:id="@+id/update_radio_group"

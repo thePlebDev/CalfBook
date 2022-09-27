@@ -41,9 +41,11 @@ class CreateCalf : Fragment() {
     }
     private lateinit var cancelButton: FloatingActionButton
     private lateinit var createButton: FloatingActionButton
-    private lateinit var  tagNumber: EditText
+    private lateinit var  calfTagNumber: EditText
+    private lateinit var  cowTagNumber: EditText
     private lateinit var details: EditText
     private lateinit var cCIANumber: EditText
+    private lateinit var birthWeight:EditText
     private lateinit var bull: RadioButton
     private lateinit var heifer: RadioButton
     private lateinit var calfDate: Date
@@ -67,9 +69,11 @@ class CreateCalf : Fragment() {
         val view = binding.root
         cancelButton = binding.newCalfFabLeft
         createButton = binding.newCalfFabRight
-        tagNumber = binding.editTag
+        calfTagNumber = binding.editCalfTag
+        cowTagNumber = binding.editCalfTag
         details = binding.editDescription
         cCIANumber = binding.editCciaNumber
+        birthWeight = binding.editBirthWeight
         bull = binding.radioBull
         heifer = binding.radioHeifer
         fabLeft = binding.newCalfFabLeft
@@ -78,12 +82,15 @@ class CreateCalf : Fragment() {
             Navigation.findNavController(view).navigate(R.id.action_createCalf_to_mainFragment)
         }
         binding.newCalfFabRight.setOnClickListener{
-            val tagNumber:String = tagNumber.text.toString()
+            val calfTag:String = calfTagNumber.text.toString()
+            val cowTag:String = cowTagNumber.text.toString()
+            val weightString = birthWeight.text.trim().toString()
+            val weight = weightString.toInt()
             val details:String = details.text.toString()
             val cciaNumber:String = cCIANumber.text.toString()
             val sex:String = CalfUtil.buttonIsChecked(bull)
 
-            saveCalf(tagNumber,details,cciaNumber,sex,it)
+            saveCalf(calfTag,cowTag,details,cciaNumber,weight,sex,it)
 
         }
 
@@ -121,19 +128,21 @@ class CreateCalf : Fragment() {
      */
 
     private fun saveCalf(
-        tagNumber: String,
+        calfTag: String,
+        cowTag:String,
         details: String,
         cciaNumber: String,
+        birthWeight:Int,
         sex: String,
         view: View,
     ){
-        if(!CalfUtil.validateTagNumber(tagNumber,this.tagNumber)){
+        if(!CalfUtil.validateTagNumber(calfTag,this.calfTagNumber)){
             // this should run if the tagNumber is not empty
-            calfViewModel.insert(Calf(tagNumber,cciaNumber,sex,details, Date()))
-            val snackBar = Snackbar.make(view,"Calf $tagNumber created", Snackbar.LENGTH_LONG)
+//            calfViewModel.insert(Calf(tagNumber,cciaNumber,sex,details, Date(),))
+            val snackBar = Snackbar.make(view,"Calf $calfTag created", Snackbar.LENGTH_LONG)
             snackBar.setAction("DISMISS", SnackBarActions(snackBar))
             snackBar.show()
-            val fireBaseCalf = FireBaseCalf(tagNumber,cciaNumber,sex,details, Date())
+            val fireBaseCalf = FireBaseCalf(calfTag,cowTag,cciaNumber,sex,details, Date(),birthWeight)
             db.collection("users").document(auth.currentUser?.email!!)
                 .collection("calves").document().set(fireBaseCalf)
 

@@ -41,7 +41,7 @@ class FirestoreViewHolder(calfView: View):RecyclerView.ViewHolder(calfView){
         val pattern = "MM-dd-yyyy"
         val simpleDateFormat = SimpleDateFormat(pattern)
         //calfId = calf.id
-        tagNumber.text = calf.tagNumber
+        tagNumber.text = calf.calfTag
         dateView.text = simpleDateFormat.format(calf.date)
         details.text = calf.details
         sex.text = calf.sex;
