@@ -12,6 +12,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.fragment.app.FragmentManager
 import androidx.navigation.Navigation
 import com.elliottsoftware.calfbook.R
 import com.elliottsoftware.calfbook.databinding.FragmentLoginBinding
@@ -123,7 +124,8 @@ class Login : Fragment(), View.OnClickListener{
                         progressBar.visibility = View.INVISIBLE
                         // Sign in success, update UI with the signed-in user's information
 
-                        Navigation.findNavController(view!!).navigate(R.id.action_login_to_mainFragment)
+                        Navigation.findNavController(view!!).navigate(LoginDirections.actionLoginToMainFragment())
+                        //it.supportFragmentManager.popBackStack()
 
                         val user = auth.currentUser
 
