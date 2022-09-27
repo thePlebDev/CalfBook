@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:fontFamily="sans-serif-black"
-        android:text="Calf Book"
+        android:text="Calf Tracker"
         android:textAlignment="center"
         android:textSize="40sp"
         android:textStyle="bold"
