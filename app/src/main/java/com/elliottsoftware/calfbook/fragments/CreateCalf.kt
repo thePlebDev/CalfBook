@@ -135,7 +135,7 @@ class CreateCalf : Fragment() {
             snackBar.show()
             val fireBaseCalf = FireBaseCalf(tagNumber,cciaNumber,sex,details, Date())
             db.collection("users").document(auth.currentUser?.email!!)
-                .collection("calves").document(cciaNumber).set(fireBaseCalf)
+                .collection("calves").document().set(fireBaseCalf)
 
             if(!isOrientationLandScape()){
                 Navigation.findNavController(view).navigate(R.id.action_createCalf_to_mainFragment)
