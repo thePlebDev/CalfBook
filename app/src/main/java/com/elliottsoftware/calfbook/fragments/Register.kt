@@ -50,6 +50,7 @@ class Register : Fragment() ,View.OnClickListener{
         super.onCreate(savedInstanceState)
         // Initialize Firebase Auth
         auth = Firebase.auth
+        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
 
     }
@@ -70,7 +71,6 @@ class Register : Fragment() ,View.OnClickListener{
         database = Firebase.database.reference
         registerUser.setOnClickListener(this)
 
-        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
         return view
     }

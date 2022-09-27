@@ -43,6 +43,7 @@ class Login : Fragment(), View.OnClickListener{
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         auth = Firebase.auth
+        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
     }
 
@@ -59,7 +60,6 @@ class Login : Fragment(), View.OnClickListener{
         progressBar = binding.progressBar
         forgotPassword = binding.forgotPassword
         register = binding.register
-        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
         return view
     }
