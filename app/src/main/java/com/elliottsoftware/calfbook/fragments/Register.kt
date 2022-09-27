@@ -138,7 +138,8 @@ class Register : Fragment() ,View.OnClickListener{
 
 
                         //NAVIGATE TO THE HOME PAGE
-                        Navigation.findNavController(view).navigate(R.id.action_register3_to_mainFragment)
+                        val action = RegisterDirections.actionRegister3ToMainFragment()
+                        Navigation.findNavController(view).navigate(action)
                        // val user = auth.currentUser
                        // user?.uid
                     }
