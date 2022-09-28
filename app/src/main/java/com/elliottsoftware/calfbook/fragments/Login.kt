@@ -12,6 +12,17 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Text
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.Navigation
 import com.elliottsoftware.calfbook.R
@@ -61,6 +72,22 @@ class Login : Fragment(), View.OnClickListener{
         progressBar = binding.progressBar
         forgotPassword = binding.forgotPassword
         register = binding.register
+
+        binding.composeView.apply {
+            //A strategy for managing the underlying Composition of Compose UI
+            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+            setContent {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text("Calf Tracker",fontSize = 40.sp,
+                        fontWeight = FontWeight.Bold,textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(start = 0.dp,16.dp,0.dp,0.dp)
+                    )
+                    Text("powered by Elliott Software",fontSize = 18.sp, fontStyle = FontStyle.Italic,
+                        textAlign = TextAlign.Center,)
+                }
+
+            }
+        }
 
         return view
     }
