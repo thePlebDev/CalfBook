@@ -15,12 +15,14 @@ import android.widget.TextView
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.FragmentManager
@@ -77,20 +79,27 @@ class Login : Fragment(), View.OnClickListener{
             //A strategy for managing the underlying Composition of Compose UI
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text("Calf Tracker",fontSize = 40.sp,
-                        fontWeight = FontWeight.Bold,textAlign = TextAlign.Center,
-                        modifier = Modifier.padding(start = 0.dp,16.dp,0.dp,0.dp)
-                    )
-                    Text("powered by Elliott Software",fontSize = 18.sp, fontStyle = FontStyle.Italic,
-                        textAlign = TextAlign.Center,)
-                }
+                BannerCard("Calf Tracker","powered by Elliott Software")
 
             }
         }
 
         return view
     }
+
+
+    @Composable
+    fun BannerCard(banner: String,bannerDescription:String) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Text(banner,fontSize = 40.sp,
+                fontWeight = FontWeight.Bold,textAlign = TextAlign.Center,
+                modifier = Modifier.padding(start = 0.dp,16.dp,0.dp,0.dp)
+            )
+            Text(bannerDescription,fontSize = 18.sp, fontStyle = FontStyle.Italic,
+                textAlign = TextAlign.Center,)
+        }
+    }
+
 
     //TODO: REFACTOR SO WE HAVE SEPARATE ONCLICK LISTENERS.
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
