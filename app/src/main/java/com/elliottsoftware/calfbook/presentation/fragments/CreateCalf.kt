@@ -1,4 +1,4 @@
-package com.elliottsoftware.calfbook.fragments
+package com.elliottsoftware.calfbook.presentation.fragments
 
 import android.content.res.Configuration
 import android.os.Bundle
@@ -12,13 +12,12 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
 import com.elliottsoftware.calfbook.R
 import com.elliottsoftware.calfbook.databinding.FragmentCreateCalfBinding
-import com.elliottsoftware.calfbook.models.Calf
-import com.elliottsoftware.calfbook.models.firebase.FireBaseCalf
+import com.elliottsoftware.calfbook.domain.models.firebase.FireBaseCalf
 import com.elliottsoftware.calfbook.util.CalfApplication
 import com.elliottsoftware.calfbook.util.CalfUtil
 import com.elliottsoftware.calfbook.util.SnackBarActions
-import com.elliottsoftware.calfbook.viewModles.CalfViewModel
-import com.elliottsoftware.calfbook.viewModles.CalfViewModelFactory
+import com.elliottsoftware.calfbook.presentation.viewModles.CalfViewModel
+import com.elliottsoftware.calfbook.presentation.viewModles.CalfViewModelFactory
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth

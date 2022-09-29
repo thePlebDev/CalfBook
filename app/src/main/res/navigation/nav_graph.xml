@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.elliottsoftware.calfbook.fragments.MainFragment"
+        android:name="com.elliottsoftware.calfbook.presentation.fragments.MainFragment"
         android:label="fragment_main"
         tools:layout="@layout/fragment_main" >
         <action
@@ -22,7 +22,7 @@
     </fragment>
     <fragment
         android:id="@+id/createCalf"
-        android:name="com.elliottsoftware.calfbook.fragments.CreateCalf"
+        android:name="com.elliottsoftware.calfbook.presentation.fragments.CreateCalf"
         android:label="fragment_create_calf"
         tools:layout="@layout/fragment_create_calf" >
         <action
@@ -34,7 +34,7 @@
     </fragment>
     <fragment
         android:id="@+id/editCalf"
-        android:name="com.elliottsoftware.calfbook.fragments.EditCalf"
+        android:name="com.elliottsoftware.calfbook.presentation.fragments.EditCalf"
         android:label="fragment_edit_calf"
         tools:layout="@layout/fragment_edit_calf" >
         <action
@@ -46,7 +46,7 @@
     </fragment>
     <fragment
         android:id="@+id/register3"
-        android:name="com.elliottsoftware.calfbook.fragments.Register"
+        android:name="com.elliottsoftware.calfbook.presentation.fragments.Register"
         android:label="Register" >
         <action
             android:id="@+id/action_register3_to_mainFragment"
@@ -57,7 +57,7 @@
     </fragment>
     <fragment
         android:id="@+id/login"
-        android:name="com.elliottsoftware.calfbook.fragments.Login"
+        android:name="com.elliottsoftware.calfbook.presentation.fragments.Login"
         android:label="fragment_register"
         tools:layout="@layout/fragment_register" >
         <action
@@ -76,6 +76,6 @@
     </fragment>
     <fragment
         android:id="@+id/forgotPassword2"
-        android:name="com.elliottsoftware.calfbook.fragments.ForgotPassword"
+        android:name="com.elliottsoftware.calfbook.presentation.fragments.ForgotPassword"
         android:label="ForgotPassword" />
 </navigation>

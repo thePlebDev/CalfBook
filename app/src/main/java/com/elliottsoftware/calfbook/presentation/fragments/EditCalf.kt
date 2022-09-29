@@ -1,4 +1,4 @@
-package com.elliottsoftware.calfbook.fragments
+package com.elliottsoftware.calfbook.presentation.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -11,13 +11,12 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import com.elliottsoftware.calfbook.R
-import com.elliottsoftware.calfbook.databinding.FragmentCreateCalfBinding
 import com.elliottsoftware.calfbook.databinding.FragmentEditCalfBinding
-import com.elliottsoftware.calfbook.models.Calf
+import com.elliottsoftware.calfbook.domain.models.Calf
 import com.elliottsoftware.calfbook.util.CalfApplication
 import com.elliottsoftware.calfbook.util.CalfUtil
-import com.elliottsoftware.calfbook.viewModles.CalfViewModel
-import com.elliottsoftware.calfbook.viewModles.CalfViewModelFactory
+import com.elliottsoftware.calfbook.presentation.viewModles.CalfViewModel
+import com.elliottsoftware.calfbook.presentation.viewModles.CalfViewModelFactory
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

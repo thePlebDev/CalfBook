@@ -1,38 +1,33 @@
-package com.elliottsoftware.calfbook.fragments
+package com.elliottsoftware.calfbook.presentation.fragments
 
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.*
-import android.view.inputmethod.EditorInfo
-import androidx.appcompat.widget.SearchView
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.elliottsoftware.calfbook.R
 import com.elliottsoftware.calfbook.databinding.FragmentMainBinding
-import com.elliottsoftware.calfbook.models.firebase.FireBaseCalf
-import com.elliottsoftware.calfbook.recyclerViews.CalfListAdapter
-import com.elliottsoftware.calfbook.recyclerViews.FirestoreAdapter
+import com.elliottsoftware.calfbook.domain.models.firebase.FireBaseCalf
+import com.elliottsoftware.calfbook.presentation.recyclerViews.CalfListAdapter
+import com.elliottsoftware.calfbook.presentation.recyclerViews.FirestoreAdapter
 import com.elliottsoftware.calfbook.util.CalfApplication
 import com.elliottsoftware.calfbook.util.SwipeToDelete
-import com.elliottsoftware.calfbook.viewModles.CalfViewModel
-import com.elliottsoftware.calfbook.viewModles.CalfViewModelFactory
+import com.elliottsoftware.calfbook.presentation.viewModles.CalfViewModel
+import com.elliottsoftware.calfbook.presentation.viewModles.CalfViewModelFactory
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.firestore.Query;
 
 
 /**

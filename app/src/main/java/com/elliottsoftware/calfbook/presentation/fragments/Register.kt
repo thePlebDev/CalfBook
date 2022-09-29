@@ -1,7 +1,6 @@
-package com.elliottsoftware.calfbook.fragments
+package com.elliottsoftware.calfbook.presentation.fragments
 
 import android.content.pm.ActivityInfo
-import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
@@ -12,11 +11,10 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
-import android.widget.Toast
 import androidx.navigation.Navigation
 import com.elliottsoftware.calfbook.R
 import com.elliottsoftware.calfbook.databinding.FragmentRegisterBinding
-import com.elliottsoftware.calfbook.models.firebase.User
+import com.elliottsoftware.calfbook.domain.models.firebase.User
 import com.elliottsoftware.calfbook.util.SnackBarActions
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
@@ -25,8 +23,6 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.FirebaseStorage
-import kotlinx.coroutines.runBlocking
 
 /**
  * A simple [Fragment] subclass.
