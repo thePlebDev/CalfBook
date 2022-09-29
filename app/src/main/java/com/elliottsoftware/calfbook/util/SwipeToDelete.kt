@@ -4,9 +4,7 @@ import android.graphics.Canvas
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.elliottsoftware.calfbook.R
-import com.elliottsoftware.calfbook.recyclerViews.CalfListAdapter
-import com.elliottsoftware.calfbook.recyclerViews.FirestoreAdapter
-import com.elliottsoftware.calfbook.viewModles.CalfViewModel
+import com.elliottsoftware.calfbook.presentation.recyclerViews.FirestoreAdapter
 
 class SwipeToDelete(private val fireStoreAdapter: FirestoreAdapter):
     ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {

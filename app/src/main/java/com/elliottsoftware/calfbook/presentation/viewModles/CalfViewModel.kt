@@ -1,7 +1,7 @@
-package com.elliottsoftware.calfbook.viewModles
+package com.elliottsoftware.calfbook.presentation.viewModles
 
 import androidx.lifecycle.*
-import com.elliottsoftware.calfbook.models.Calf
+import com.elliottsoftware.calfbook.domain.models.Calf
 import com.elliottsoftware.calfbook.repositories.CalfRepository
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async

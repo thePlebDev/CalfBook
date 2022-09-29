@@ -1,4 +1,4 @@
-package com.elliottsoftware.calfbook.recyclerViews
+package com.elliottsoftware.calfbook.presentation.recyclerViews
 
 import android.view.LayoutInflater
 import android.view.View
@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.elliottsoftware.calfbook.R
-import com.elliottsoftware.calfbook.models.Calf
+import com.elliottsoftware.calfbook.domain.models.Calf
 import java.text.SimpleDateFormat
 
 class CalfListAdapter(private val onCalfListener: OnCalfListener) :

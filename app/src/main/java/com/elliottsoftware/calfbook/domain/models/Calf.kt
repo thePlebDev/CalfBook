@@ -1,4 +1,4 @@
-package com.elliottsoftware.calfbook.models
+package com.elliottsoftware.calfbook.domain.models
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

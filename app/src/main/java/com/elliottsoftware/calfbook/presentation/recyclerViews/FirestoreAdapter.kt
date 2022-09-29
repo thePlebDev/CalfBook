@@ -1,4 +1,4 @@
-package com.elliottsoftware.calfbook.recyclerViews
+package com.elliottsoftware.calfbook.presentation.recyclerViews
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,8 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.elliottsoftware.calfbook.R
-import com.elliottsoftware.calfbook.models.Calf
-import com.elliottsoftware.calfbook.models.firebase.FireBaseCalf
+import com.elliottsoftware.calfbook.domain.models.firebase.FireBaseCalf
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import java.text.SimpleDateFormat

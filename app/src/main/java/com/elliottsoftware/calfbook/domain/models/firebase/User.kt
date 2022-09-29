@@ -1,4 +1,4 @@
-package com.elliottsoftware.calfbook.models.firebase
+package com.elliottsoftware.calfbook.domain.models.firebase
 
 import com.google.firebase.database.IgnoreExtraProperties
 

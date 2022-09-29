@@ -11,7 +11,7 @@
         android:layout_width="280dp"
         android:layout_gravity="start"
         android:layout_height="match_parent"
-        tools:context=".fragments.MainFragment">
+        tools:context=".presentation.fragments.MainFragment">
 
 
 
@@ -39,7 +39,7 @@
         android:layout_width="300dp"
         android:layout_weight="1"
         android:layout_height="match_parent"
-        android:name="com.elliottsoftware.calfbook.fragments.CreateCalf" />
+        android:name="com.elliottsoftware.calfbook.presentation.fragments.CreateCalf" />
 
 
 </androidx.slidingpanelayout.widget.SlidingPaneLayout>

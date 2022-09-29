@@ -1,8 +1,8 @@
 package com.elliottsoftware.calfbook.repositories
 
 import androidx.annotation.WorkerThread
-import com.elliottsoftware.calfbook.daos.CalfDao
-import com.elliottsoftware.calfbook.models.Calf
+import com.elliottsoftware.calfbook.domain.daos.CalfDao
+import com.elliottsoftware.calfbook.domain.models.Calf
 import kotlinx.coroutines.flow.Flow
 
 class CalfRepository(private val calfDao: CalfDao) {

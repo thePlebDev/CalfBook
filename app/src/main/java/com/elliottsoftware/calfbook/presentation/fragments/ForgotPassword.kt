@@ -1,4 +1,4 @@
-package com.elliottsoftware.calfbook.fragments
+package com.elliottsoftware.calfbook.presentation.fragments
 
 import android.content.pm.ActivityInfo
 import android.os.Bundle
@@ -10,9 +10,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
-import com.elliottsoftware.calfbook.R
 import com.elliottsoftware.calfbook.databinding.FragmentForgotPasswordBinding
-import com.elliottsoftware.calfbook.databinding.FragmentMainBinding
 import com.elliottsoftware.calfbook.util.SnackBarActions
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth

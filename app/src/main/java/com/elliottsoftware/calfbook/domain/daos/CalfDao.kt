@@ -1,7 +1,7 @@
-package com.elliottsoftware.calfbook.daos
+package com.elliottsoftware.calfbook.domain.daos
 
 import androidx.room.*
-import com.elliottsoftware.calfbook.models.Calf
+import com.elliottsoftware.calfbook.domain.models.Calf
 import kotlinx.coroutines.flow.Flow
 
 @Dao

@@ -5,8 +5,8 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.elliottsoftware.calfbook.daos.CalfDao
-import com.elliottsoftware.calfbook.models.Calf
+import com.elliottsoftware.calfbook.domain.daos.CalfDao
+import com.elliottsoftware.calfbook.domain.models.Calf
 import com.elliottsoftware.calfbook.util.DateTimeConverter
 
 @Database(entities = [Calf::class], version = 1, exportSchema = false)

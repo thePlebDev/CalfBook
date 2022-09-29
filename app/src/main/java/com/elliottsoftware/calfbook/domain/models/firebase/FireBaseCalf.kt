@@ -1,6 +1,5 @@
-package com.elliottsoftware.calfbook.models.firebase
+package com.elliottsoftware.calfbook.domain.models.firebase
 
-import androidx.room.PrimaryKey
 import com.google.firebase.database.IgnoreExtraProperties
 import java.util.*
 
