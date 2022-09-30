@@ -11,10 +11,12 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Error
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -30,9 +32,12 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.Navigation
 import com.elliottsoftware.calfbook.R
 import com.elliottsoftware.calfbook.databinding.FragmentLoginBinding
+import com.elliottsoftware.calfbook.presentation.RegistrationFormEvent
+import com.elliottsoftware.calfbook.presentation.viewModles.LoginViewModel
 import com.elliottsoftware.calfbook.util.SnackBarActions
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
@@ -49,7 +54,7 @@ class Login : Fragment(), View.OnClickListener{
     private val binding get() = _binding!!
    // private lateinit var email:EditText
     private lateinit var password:EditText
-    private lateinit var loginButton:Button
+    //private lateinit var loginButton:Button
     private lateinit var register:TextView
     private lateinit var forgotPassword:TextView
     private lateinit var progressBar: ProgressBar
@@ -74,7 +79,7 @@ class Login : Fragment(), View.OnClickListener{
         val view = binding.root
        // email = binding.email;
        // password = binding.password
-        loginButton =binding.loginButton
+        //loginButton =binding.loginButton
         progressBar = binding.progressBar
         forgotPassword = binding.forgotPassword
         register = binding.register
@@ -82,7 +87,13 @@ class Login : Fragment(), View.OnClickListener{
         binding.composeView.apply {
             //A strategy for managing the underlying Composition of Compose UI
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+
             setContent {
+                val viewModel = viewModel<LoginViewModel>()
+                val state = viewModel.state
+
+                //
+              //  viewModel.validationEvents.collect()
                 BannerCard("Calf Tracker","powered by Elliott Software")
 
 
@@ -95,6 +106,7 @@ class Login : Fragment(), View.OnClickListener{
 
     @Composable
     fun BannerCard(banner: String,bannerDescription:String) {
+
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text(banner,fontSize = 40.sp,
                 fontWeight = FontWeight.Bold,textAlign = TextAlign.Center,
@@ -102,22 +114,33 @@ class Login : Fragment(), View.OnClickListener{
             )
             Text(bannerDescription,fontSize = 18.sp, fontStyle = FontStyle.Italic,
                 textAlign = TextAlign.Center,)
-            EmailPasswordLogin("Email","Password")
+
+            EmailPasswordLogin()
+            LoginButton()
+            Spacer(modifier = Modifier.padding(start = 0.dp, 30.dp, 0.dp, 0.dp))
+            LinearProgressIndicator(modifier = Modifier.width(276.dp))
+
         }
     }
+    //TODO: REWORK WITH BY "PROGRAMMING TO AN INTERFACE",  instead of the hardcoded LoginViewModel
     @Composable
-    fun EmailPasswordLogin(placeHolder1:String,placeHolder2: String){
-        var emailText by remember { mutableStateOf("") }
+    fun EmailPasswordLogin(loginViewModel: LoginViewModel = viewModel()){
+        val state = loginViewModel.state
         var passwordText by remember { mutableStateOf("") }
         var passwordVisibility by remember { mutableStateOf(false) }
-        val icon = if(passwordVisibility)
+        //todo: migrate this functionality to the viewModel?
+        val icon = if(state.passwordIconChecked)
             painterResource(id = com.firebase.ui.auth.R.drawable.design_ic_visibility)
         else
             painterResource(id = com.firebase.ui.auth.R.drawable.design_ic_visibility_off)
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            OutlinedTextField(value = emailText, onValueChange = {emailText = it}
+
+            OutlinedTextField(value = state.email,
+                onValueChange = {loginViewModel.updateEmail(it)},
+                singleLine = true,
+                isError= state.emailError != null
                 ,placeholder = {
-                    Text(text = placeHolder1,fontSize = 26.sp)
+                    Text(text = "Email",fontSize = 26.sp)
                                },
                  modifier = Modifier.padding(start = 0.dp,50.dp,0.dp,0.dp)
                 ,
@@ -125,8 +148,12 @@ class Login : Fragment(), View.OnClickListener{
 
 
             )
-            OutlinedTextField(value = passwordText, onValueChange = {passwordText = it}
-                ,placeholder = { Text(text = placeHolder2,fontSize = 26.sp) },
+            if(state.emailError != null){
+                Text(text = state.emailError,color =MaterialTheme.colors.error, modifier = Modifier.align(Alignment.End))
+            }
+
+            OutlinedTextField(value = passwordText, onValueChange = {loginViewModel.updatePassword(it)}
+                ,placeholder = { Text(text = "Password",fontSize = 26.sp) },
                 modifier = Modifier.padding(start = 0.dp,20.dp,0.dp,0.dp),
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Password
@@ -146,9 +173,21 @@ class Login : Fragment(), View.OnClickListener{
 
     }
 
+    @Composable
+    fun LoginButton(loginViewModel: LoginViewModel = viewModel()){
+        Button(onClick = { loginViewModel.submitData()},
+            modifier = Modifier
+                .height(80.dp)
+                .width(280.dp)
+                .padding(start = 0.dp, 20.dp, 0.dp, 0.dp)) {
+
+            Text(text = "Login",fontSize = 26.sp)
+        }
+    }
 
 
-    //TODO: REFACTOR SO WE HAVE SEPARATE ONCLICK LISTENERS.
+
+    //TODO: REFACTOR TO CLEAN CODE ARC.
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         register.setOnClickListener{
@@ -157,7 +196,7 @@ class Login : Fragment(), View.OnClickListener{
         forgotPassword.setOnClickListener{
             Navigation.findNavController(binding.root).navigate(R.id.action_login_to_forgotPassword2)
         }
-        loginButton.setOnClickListener(this)
+      //  loginButton.setOnClickListener(this)
     }
 
      override fun onStart() {

@@ -36,7 +36,13 @@ class LoginViewModel(
             }
         }
     }
-    private fun submitData(){
+    fun updateEmail(email:String){
+        state = state.copy(email = email)
+    }
+    fun updatePassword(password:String){
+        state = state.copy(password = password)
+    }
+     fun submitData(){
         val emailResult = validateEmail.execute(state.email)
         val passwordResult = validatePassword.execute(state.password)
 
@@ -55,7 +61,12 @@ class LoginViewModel(
         viewModelScope.launch {
             validationEventChannel.send(ValidationEvent.Success)
         }
+
     }
+    fun passwordIconChecked(){
+
+    }
+
     sealed class ValidationEvent{
         object Success:ValidationEvent()
     }
