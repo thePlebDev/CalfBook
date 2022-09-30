@@ -20,7 +20,7 @@ class LoginViewModel(
 ): ViewModel() {
 
     var state by mutableStateOf(LoginFormState())
-    private val validationEventChannel = Channel<ValidationEvent>()
+    private val validationEventChannel = Channel<ValidationEvent>() //this is what we are calling send() on
     val validationEvents = validationEventChannel.receiveAsFlow()
 
     fun onEvent(event: RegistrationFormEvent) {
