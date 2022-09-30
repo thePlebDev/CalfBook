@@ -13,13 +13,20 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.*
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -40,7 +47,7 @@ class Login : Fragment(), View.OnClickListener{
     private var _binding: FragmentLoginBinding? = null
     //this property is only valid between onCreateView() and onDestroyView()
     private val binding get() = _binding!!
-    private lateinit var email:EditText
+   // private lateinit var email:EditText
     private lateinit var password:EditText
     private lateinit var loginButton:Button
     private lateinit var register:TextView
@@ -65,8 +72,8 @@ class Login : Fragment(), View.OnClickListener{
         // Inflate the layout for this fragment
         _binding = FragmentLoginBinding.inflate(inflater,container,false)
         val view = binding.root
-        email = binding.email;
-        password = binding.password
+       // email = binding.email;
+       // password = binding.password
         loginButton =binding.loginButton
         progressBar = binding.progressBar
         forgotPassword = binding.forgotPassword
@@ -77,6 +84,7 @@ class Login : Fragment(), View.OnClickListener{
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 BannerCard("Calf Tracker","powered by Elliott Software")
+
 
             }
         }
@@ -94,8 +102,50 @@ class Login : Fragment(), View.OnClickListener{
             )
             Text(bannerDescription,fontSize = 18.sp, fontStyle = FontStyle.Italic,
                 textAlign = TextAlign.Center,)
+            EmailPasswordLogin("Email","Password")
         }
     }
+    @Composable
+    fun EmailPasswordLogin(placeHolder1:String,placeHolder2: String){
+        var emailText by remember { mutableStateOf("") }
+        var passwordText by remember { mutableStateOf("") }
+        var passwordVisibility by remember { mutableStateOf(false) }
+        val icon = if(passwordVisibility)
+            painterResource(id = com.firebase.ui.auth.R.drawable.design_ic_visibility)
+        else
+            painterResource(id = com.firebase.ui.auth.R.drawable.design_ic_visibility_off)
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            OutlinedTextField(value = emailText, onValueChange = {emailText = it}
+                ,placeholder = {
+                    Text(text = placeHolder1,fontSize = 26.sp)
+                               },
+                 modifier = Modifier.padding(start = 0.dp,50.dp,0.dp,0.dp)
+                ,
+                textStyle = TextStyle(fontSize = 26.sp)
+
+
+            )
+            OutlinedTextField(value = passwordText, onValueChange = {passwordText = it}
+                ,placeholder = { Text(text = placeHolder2,fontSize = 26.sp) },
+                modifier = Modifier.padding(start = 0.dp,20.dp,0.dp,0.dp),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Password
+                ),
+                trailingIcon = {
+                    IconButton(onClick = {
+                        passwordVisibility = !passwordVisibility
+                    }) {
+                        Icon(painter = icon, contentDescription ="Visibility Icon" )
+                    }
+                },
+                visualTransformation = if(passwordVisibility) VisualTransformation.None
+                 else PasswordVisualTransformation(),
+                textStyle = TextStyle(fontSize = 26.sp)
+            )
+        }
+
+    }
+
 
 
     //TODO: REFACTOR SO WE HAVE SEPARATE ONCLICK LISTENERS.
@@ -127,25 +177,25 @@ class Login : Fragment(), View.OnClickListener{
     override fun onClick(p0: View?):Unit {
         //VALIDATE EMAIL, NOT NULL AND EMAIL
         //VALIDATE PASSWORD IS NOT NULL
-        val email = this.email.text.toString().trim()
-        val password = this.password.text.toString().trim()
-        if(email.isEmpty()){
-            this.email.error = "Email required"
-            this.email.requestFocus()
-            return
-        }
-        if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
-            this.email.error = "Please provide valid email"
-            this.email.requestFocus()
-            return
-        }
-        if(password.isEmpty()){
-            this.password.error = "Password required"
-            this.password.requestFocus()
-            return
-        }
-        progressBar.visibility = View.VISIBLE
-        signinUser(email,password)
+//        val email = this.email.text.toString().trim()
+//        val password = this.password.text.toString().trim()
+//        if(email.isEmpty()){
+//            this.email.error = "Email required"
+//            this.email.requestFocus()
+//            return
+//        }
+//        if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+//            this.email.error = "Please provide valid email"
+//            this.email.requestFocus()
+//            return
+//        }
+//        if(password.isEmpty()){
+//            this.password.error = "Password required"
+//            this.password.requestFocus()
+//            return
+//        }
+//        progressBar.visibility = View.VISIBLE
+//        signinUser(email,password)
 
     }
 
