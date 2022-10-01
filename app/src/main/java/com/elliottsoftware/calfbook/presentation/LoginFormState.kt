@@ -6,6 +6,6 @@ data class LoginFormState (
     val password:String = "",
     val passwordError:String? = null,
     val passwordIconChecked:Boolean = true,
-    val showProgressBar:Boolean = true
+    val showProgressBar:Boolean = false
         ){
 }
