@@ -1,4 +1,4 @@
-package com.elliottsoftware.calfbook.presentation.viewModles
+package com.elliottsoftware.calfbook.presentation.login
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -7,8 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.elliottsoftware.calfbook.domain.use_cases.ValidateEmail
 import com.elliottsoftware.calfbook.domain.use_cases.ValidatePassword
-import com.elliottsoftware.calfbook.presentation.LoginFormState
-import com.elliottsoftware.calfbook.presentation.RegistrationFormEvent
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -70,12 +68,13 @@ class LoginViewModel(
         }
 
     }
-    fun passwordIconChecked(){
+    fun passwordIconChecked(checked:Boolean){
+        state = state.copy(passwordIconChecked= checked)
 
     }
 
     sealed class ValidationEvent{
-        object Success:ValidationEvent()
+        object Success: ValidationEvent()
     }
 
 }
