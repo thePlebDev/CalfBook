@@ -26,9 +26,9 @@ import com.firebase.ui.auth.R
 fun LoginView(viewModel: LoginViewModel, state: LoginFormState) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         BannerCard("Calf Tracker", "powered by Elliott Software")
-        EmailInput()
-        PasswordInput()
-        LoginButton()
+        EmailInput(viewModel,state)
+        PasswordInput(viewModel,state)
+        LoginButton(viewModel)
         LinearLoadingBar(state.showProgressBar)
 
     }
@@ -45,7 +45,7 @@ fun LinearLoadingBar(showLoadingBar:Boolean){
 
 
 @Composable
-fun BannerCard(banner: String,bannerDescription:String,viewModel: LoginViewModel = viewModel()) {
+fun BannerCard(banner: String,bannerDescription:String) {
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
@@ -61,14 +61,14 @@ fun BannerCard(banner: String,bannerDescription:String,viewModel: LoginViewModel
 
 //TODO: REWORK WITH BY "PROGRAMMING TO AN INTERFACE",  instead of the hardcoded LoginViewModel
 @Composable
-fun EmailInput(loginViewModel: LoginViewModel = viewModel()){
-    val state = loginViewModel.state
+fun EmailInput(viewModel: LoginViewModel, state: LoginFormState){
+
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
 
         OutlinedTextField(value = state.email,
-            onValueChange = {loginViewModel.updateEmail(it)},
+            onValueChange = {viewModel.updateEmail(it)},
             singleLine = true,
             isError= state.emailError != null
             ,placeholder = {
@@ -92,8 +92,8 @@ fun EmailInput(loginViewModel: LoginViewModel = viewModel()){
 
 }
 @Composable
-fun PasswordInput(loginViewModel: LoginViewModel = viewModel()){
-    val state = loginViewModel.state
+fun PasswordInput(viewModel: LoginViewModel, state: LoginFormState){
+
     //todo: migrate this functionality to the viewModel?
     val icon = if(state.passwordIconChecked)
         painterResource(id = R.drawable.design_ic_visibility)
@@ -102,7 +102,7 @@ fun PasswordInput(loginViewModel: LoginViewModel = viewModel()){
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         OutlinedTextField(value = state.password,
-            onValueChange = { loginViewModel.updatePassword(it) },
+            onValueChange = { viewModel.updatePassword(it) },
             placeholder = { Text(text = "Password", fontSize = 26.sp) },
             modifier = Modifier.padding(start = 0.dp, 10.dp, 0.dp, 0.dp),
             keyboardOptions = KeyboardOptions(
@@ -111,7 +111,7 @@ fun PasswordInput(loginViewModel: LoginViewModel = viewModel()){
             isError = state.passwordError != null,
             trailingIcon = {
                 IconButton(onClick = {
-                    loginViewModel.passwordIconChecked(!state.passwordIconChecked)
+                    viewModel.passwordIconChecked(!state.passwordIconChecked)
                 }) {
                     Icon(painter = icon, contentDescription = "Visibility Icon")
                 }
@@ -132,8 +132,8 @@ fun PasswordInput(loginViewModel: LoginViewModel = viewModel()){
 }
 
 @Composable
-fun LoginButton(loginViewModel: LoginViewModel = viewModel()){
-    Button(onClick = { loginViewModel.submitData()},
+fun LoginButton(viewModel: LoginViewModel){
+    Button(onClick = { viewModel.submitData()},
         modifier = Modifier
             .height(80.dp)
             .width(280.dp)
