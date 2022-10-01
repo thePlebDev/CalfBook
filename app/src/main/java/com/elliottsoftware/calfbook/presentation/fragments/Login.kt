@@ -2,23 +2,17 @@ package com.elliottsoftware.calfbook.presentation.fragments
 
 import android.content.pm.ActivityInfo
 import android.os.Bundle
-import android.util.Patterns
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Error
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ViewCompositionStrategy
@@ -36,8 +30,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.Navigation
 import com.elliottsoftware.calfbook.R
 import com.elliottsoftware.calfbook.databinding.FragmentLoginBinding
-import com.elliottsoftware.calfbook.presentation.RegistrationFormEvent
-import com.elliottsoftware.calfbook.presentation.viewModles.LoginViewModel
+import com.elliottsoftware.calfbook.presentation.login.LoginScreen
+import com.elliottsoftware.calfbook.presentation.login.LoginViewModel
 import com.elliottsoftware.calfbook.util.SnackBarActions
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
@@ -89,12 +83,11 @@ class Login : Fragment(), View.OnClickListener{
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
 
             setContent {
-                val viewModel = viewModel<LoginViewModel>()
-                val state = viewModel.state
+
 
                 //
               //  viewModel.validationEvents.collect()
-                BannerCard("Calf Tracker","powered by Elliott Software")
+                LoginScreen()
 
 
             }
@@ -103,105 +96,6 @@ class Login : Fragment(), View.OnClickListener{
         return view
     }
 
-
-    @Composable
-    fun BannerCard(banner: String,bannerDescription:String,viewModel:LoginViewModel = viewModel()) {
-
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-
-            Text(banner,fontSize = 40.sp,
-                fontWeight = FontWeight.Bold,textAlign = TextAlign.Center,
-                modifier = Modifier.padding(start = 0.dp,16.dp,0.dp,0.dp)
-            )
-            Text(bannerDescription,fontSize = 18.sp, fontStyle = FontStyle.Italic,
-                textAlign = TextAlign.Center,)
-
-
-
-
-            EmailPasswordLogin()
-            LoginButton()
-            if(viewModel.state.showProgressBar){
-                LinearProgressIndicator(modifier = Modifier
-                    .width(276.dp)
-                    .padding(start = 0.dp, 16.dp, 0.dp, 0.dp))
-            }
-
-
-
-
-        }
-    }
-    //TODO: REWORK WITH BY "PROGRAMMING TO AN INTERFACE",  instead of the hardcoded LoginViewModel
-    @Composable
-    fun EmailPasswordLogin(loginViewModel: LoginViewModel = viewModel()){
-        val state = loginViewModel.state
-
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-
-
-            OutlinedTextField(value = state.email,
-                onValueChange = {loginViewModel.updateEmail(it)},
-                singleLine = true,
-                isError= state.emailError != null
-                ,placeholder = {
-                    Text(text = "Email",fontSize = 26.sp)
-                               },
-                 modifier = Modifier.padding(start = 0.dp,40.dp,0.dp,0.dp)
-                ,
-                textStyle = TextStyle(fontSize = 26.sp),
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Email
-                ),
-
-
-            )
-            if(state.emailError != null){
-                Text(text = state.emailError,color =MaterialTheme.colors.error, modifier = Modifier.align(Alignment.End))
-            }
-            var passwordVisibility by remember { mutableStateOf(false) }
-            //todo: migrate this functionality to the viewModel?
-            val icon = if(passwordVisibility)
-                painterResource(id = com.firebase.ui.auth.R.drawable.design_ic_visibility)
-            else
-                painterResource(id = com.firebase.ui.auth.R.drawable.design_ic_visibility_off)
-
-            OutlinedTextField(value = state.password, onValueChange = {loginViewModel.updatePassword(it)}
-                ,placeholder = { Text(text = "Password",fontSize = 26.sp) },
-                modifier = Modifier.padding(start = 0.dp,10.dp,0.dp,0.dp),
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Password
-                ),
-                isError= state.passwordError != null,
-                trailingIcon = {
-                    IconButton(onClick = {
-                        passwordVisibility = !passwordVisibility
-                    }) {
-                        Icon(painter = icon, contentDescription ="Visibility Icon" )
-                    }
-                },
-                visualTransformation = if(passwordVisibility) VisualTransformation.None
-                 else PasswordVisualTransformation(),
-                textStyle = TextStyle(fontSize = 26.sp)
-            )
-            if(state.passwordError != null){
-                Text(text = state.passwordError,color =MaterialTheme.colors.error, modifier = Modifier.align(Alignment.End))
-            }
-        }
-
-    }
-
-    @Composable
-    fun LoginButton(loginViewModel: LoginViewModel = viewModel()){
-        Button(onClick = { loginViewModel.submitData()},
-            modifier = Modifier
-                .height(80.dp)
-                .width(280.dp)
-                .padding(start = 0.dp, 20.dp, 0.dp, 0.dp)) {
-
-            Text(text = "Login",fontSize = 26.sp)
-        }
-    }
 
 
 
