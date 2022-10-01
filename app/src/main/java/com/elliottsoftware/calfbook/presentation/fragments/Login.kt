@@ -84,9 +84,6 @@ class Login : Fragment(), View.OnClickListener{
 
             setContent {
 
-
-                //
-              //  viewModel.validationEvents.collect()
                 LoginScreen()
 
 
