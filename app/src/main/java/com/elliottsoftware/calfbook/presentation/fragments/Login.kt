@@ -105,9 +105,10 @@ class Login : Fragment(), View.OnClickListener{
 
 
     @Composable
-    fun BannerCard(banner: String,bannerDescription:String) {
+    fun BannerCard(banner: String,bannerDescription:String,viewModel:LoginViewModel = viewModel()) {
 
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
+
             Text(banner,fontSize = 40.sp,
                 fontWeight = FontWeight.Bold,textAlign = TextAlign.Center,
                 modifier = Modifier.padding(start = 0.dp,16.dp,0.dp,0.dp)
@@ -115,10 +116,19 @@ class Login : Fragment(), View.OnClickListener{
             Text(bannerDescription,fontSize = 18.sp, fontStyle = FontStyle.Italic,
                 textAlign = TextAlign.Center,)
 
+
+
+
             EmailPasswordLogin()
             LoginButton()
-            Spacer(modifier = Modifier.padding(start = 0.dp, 30.dp, 0.dp, 0.dp))
-            LinearProgressIndicator(modifier = Modifier.width(276.dp))
+            if(viewModel.state.showProgressBar){
+                LinearProgressIndicator(modifier = Modifier
+                    .width(276.dp)
+                    .padding(start = 0.dp, 16.dp, 0.dp, 0.dp))
+            }
+
+
+
 
         }
     }
@@ -126,14 +136,9 @@ class Login : Fragment(), View.OnClickListener{
     @Composable
     fun EmailPasswordLogin(loginViewModel: LoginViewModel = viewModel()){
         val state = loginViewModel.state
-        var passwordText by remember { mutableStateOf("") }
-        var passwordVisibility by remember { mutableStateOf(false) }
-        //todo: migrate this functionality to the viewModel?
-        val icon = if(state.passwordIconChecked)
-            painterResource(id = com.firebase.ui.auth.R.drawable.design_ic_visibility)
-        else
-            painterResource(id = com.firebase.ui.auth.R.drawable.design_ic_visibility_off)
+
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
+
 
             OutlinedTextField(value = state.email,
                 onValueChange = {loginViewModel.updateEmail(it)},
@@ -142,22 +147,32 @@ class Login : Fragment(), View.OnClickListener{
                 ,placeholder = {
                     Text(text = "Email",fontSize = 26.sp)
                                },
-                 modifier = Modifier.padding(start = 0.dp,50.dp,0.dp,0.dp)
+                 modifier = Modifier.padding(start = 0.dp,40.dp,0.dp,0.dp)
                 ,
-                textStyle = TextStyle(fontSize = 26.sp)
+                textStyle = TextStyle(fontSize = 26.sp),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Email
+                ),
 
 
             )
             if(state.emailError != null){
                 Text(text = state.emailError,color =MaterialTheme.colors.error, modifier = Modifier.align(Alignment.End))
             }
+            var passwordVisibility by remember { mutableStateOf(false) }
+            //todo: migrate this functionality to the viewModel?
+            val icon = if(passwordVisibility)
+                painterResource(id = com.firebase.ui.auth.R.drawable.design_ic_visibility)
+            else
+                painterResource(id = com.firebase.ui.auth.R.drawable.design_ic_visibility_off)
 
-            OutlinedTextField(value = passwordText, onValueChange = {loginViewModel.updatePassword(it)}
+            OutlinedTextField(value = state.password, onValueChange = {loginViewModel.updatePassword(it)}
                 ,placeholder = { Text(text = "Password",fontSize = 26.sp) },
-                modifier = Modifier.padding(start = 0.dp,20.dp,0.dp,0.dp),
+                modifier = Modifier.padding(start = 0.dp,10.dp,0.dp,0.dp),
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Password
                 ),
+                isError= state.passwordError != null,
                 trailingIcon = {
                     IconButton(onClick = {
                         passwordVisibility = !passwordVisibility
@@ -169,6 +184,9 @@ class Login : Fragment(), View.OnClickListener{
                  else PasswordVisualTransformation(),
                 textStyle = TextStyle(fontSize = 26.sp)
             )
+            if(state.passwordError != null){
+                Text(text = state.passwordError,color =MaterialTheme.colors.error, modifier = Modifier.align(Alignment.End))
+            }
         }
 
     }

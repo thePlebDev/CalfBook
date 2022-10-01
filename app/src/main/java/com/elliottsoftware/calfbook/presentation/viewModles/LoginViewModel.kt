@@ -42,9 +42,15 @@ class LoginViewModel(
     fun updatePassword(password:String){
         state = state.copy(password = password)
     }
+    private fun showProgressBar(show:Boolean){
+        state = state.copy(showProgressBar = show)
+
+    }
      fun submitData(){
+
         val emailResult = validateEmail.execute(state.email)
         val passwordResult = validatePassword.execute(state.password)
+         showProgressBar(true)
 
         val hasError = listOf(
             emailResult,
@@ -56,6 +62,7 @@ class LoginViewModel(
                 emailError = emailResult.message,
                 passwordError = passwordResult.message
             )
+            //showProgressBar(false)
             return
         }
         viewModelScope.launch {

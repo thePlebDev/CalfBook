@@ -9,7 +9,7 @@ class ValidateEmail {
         if(email.isBlank()){
             return ValidationResult(false,"Email can not be blank")
         }
-        if(Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+        if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
             return ValidationResult(
                 successful = false,
                 message = "Please enter valid email"
