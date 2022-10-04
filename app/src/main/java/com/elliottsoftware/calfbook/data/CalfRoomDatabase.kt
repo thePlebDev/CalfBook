@@ -1,4 +1,4 @@
-package com.elliottsoftware.calfbook.db
+package com.elliottsoftware.calfbook.data
 
 import android.content.Context
 import androidx.room.Database
@@ -21,7 +21,7 @@ public abstract class CalfRoomDatabase : RoomDatabase(){
         @Volatile
         private var INSTANCE: CalfRoomDatabase? = null //companion property
 
-        fun getDatabase(context: Context): CalfRoomDatabase{
+        fun getDatabase(context: Context): CalfRoomDatabase {
             // if the INSTANCE is not null, then return it,
             // if it is, then create the database
             return INSTANCE ?: synchronized(this){

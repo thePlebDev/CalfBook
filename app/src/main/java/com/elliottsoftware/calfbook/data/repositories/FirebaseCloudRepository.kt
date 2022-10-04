@@ -1,4 +1,4 @@
-package com.elliottsoftware.calfbook.repositories
+package com.elliottsoftware.calfbook.data.repositories
 
 import com.google.firebase.firestore.FirebaseFirestore
 

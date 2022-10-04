@@ -1,4 +1,4 @@
-package com.elliottsoftware.calfbook.repositories
+package com.elliottsoftware.calfbook.data.repositories
 
 import androidx.annotation.WorkerThread
 import com.elliottsoftware.calfbook.domain.daos.CalfDao
