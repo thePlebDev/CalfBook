@@ -20,6 +20,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.elliottsoftware.calfbook.domain.models.Response
 import com.firebase.ui.auth.R
 
 @Composable
@@ -28,20 +29,11 @@ fun LoginView(viewModel: LoginViewModel, state: LoginFormState) {
         BannerCard("Calf Tracker", "powered by Elliott Software")
         EmailInput(viewModel,state)
         PasswordInput(viewModel,state)
-        LoginButton(viewModel)
-        LinearLoadingBar(state.showProgressBar)
+        SignInWithFirebase(viewModel)
 
     }
 }
-@Composable
-fun LinearLoadingBar(showLoadingBar:Boolean){
-    if(showLoadingBar){
-        LinearProgressIndicator(modifier = Modifier
-            .width(276.dp)
-            .padding(start = 0.dp, 16.dp, 0.dp, 0.dp))
-    }
 
-}
 
 
 @Composable
@@ -131,9 +123,10 @@ fun PasswordInput(viewModel: LoginViewModel, state: LoginFormState){
 
 }
 
+
 @Composable
-fun LoginButton(viewModel: LoginViewModel){
-    Button(onClick = { viewModel.submitData()},
+fun SignInWithFirebase(viewModel: LoginViewModel){
+    Button(onClick = { viewModel.signInWithFireBase()},
         modifier = Modifier
             .height(80.dp)
             .width(280.dp)
@@ -141,4 +134,16 @@ fun LoginButton(viewModel: LoginViewModel){
 
         Text(text = "Login",fontSize = 26.sp)
     }
+    when(val signInWithFirebase = viewModel.signInWithFirebaseResponse){
+        is Response.Loading -> LinearLoadingBar()
+        else -> {}
+    }
+}
+@Composable
+fun LinearLoadingBar(){
+
+        LinearProgressIndicator(modifier = Modifier
+            .width(276.dp)
+            .padding(start = 0.dp, 16.dp, 0.dp, 0.dp))
+
 }

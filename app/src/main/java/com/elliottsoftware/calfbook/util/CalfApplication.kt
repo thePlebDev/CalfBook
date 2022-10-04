@@ -1,8 +1,8 @@
 package com.elliottsoftware.calfbook.util
 
 import android.app.Application
-import com.elliottsoftware.calfbook.db.CalfRoomDatabase
-import com.elliottsoftware.calfbook.repositories.CalfRepository
+import com.elliottsoftware.calfbook.data.CalfRoomDatabase
+import com.elliottsoftware.calfbook.data.repositories.CalfRepository
 
 class CalfApplication : Application() {
 
