@@ -126,7 +126,7 @@ fun PasswordInput(viewModel: LoginViewModel, state: LoginFormState){
 
 @Composable
 fun SignInWithFirebase(viewModel: LoginViewModel){
-    Button(onClick = { viewModel.signInWithFireBase()},
+    Button(onClick = { viewModel.submitData()},
         modifier = Modifier
             .height(80.dp)
             .width(280.dp)
@@ -134,10 +134,10 @@ fun SignInWithFirebase(viewModel: LoginViewModel){
 
         Text(text = "Login",fontSize = 26.sp)
     }
-    when(val signInWithFirebase = viewModel.signInWithFirebaseResponse){
-        is Response.Loading -> LinearLoadingBar()
-        else -> {}
-    }
+//    when(val signInWithFirebase = viewModel.signInWithFirebaseResponse){
+//        is Response.Loading -> LinearLoadingBar()
+//        else -> {}
+//    }
 }
 @Composable
 fun LinearLoadingBar(){
