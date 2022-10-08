@@ -1,5 +1,6 @@
 package com.elliottsoftware.calfbook.presentation.login
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -134,16 +135,33 @@ fun SignInWithFirebase(viewModel: LoginViewModel){
 
         Text(text = "Login",fontSize = 26.sp)
     }
-//    when(val signInWithFirebase = viewModel.signInWithFirebaseResponse){
-//        is Response.Loading -> LinearLoadingBar()
-//        else -> {}
-//    }
+    when(val response = viewModel.signInWithFirebaseResponse){
+        is Response.Loading -> LinearLoadingBar()
+        is Response.Success -> {
+            if(response.data){
+                //THIS IS WHERE WE WOULD DO THE NAVIGATION
+                Success()
+            }
+        }
+        is Response.Failure -> {
+            //should probably show a snackbar
+            Fail()
+            Log.d("Login Error",response.e.message.toString())
+        }
+    }
 }
 @Composable
 fun LinearLoadingBar(){
-
         LinearProgressIndicator(modifier = Modifier
             .width(276.dp)
             .padding(start = 0.dp, 16.dp, 0.dp, 0.dp))
 
+}
+@Composable
+fun Fail() {
+    Text("FAIL")
+}
+@Composable
+fun Success() {
+    Text("SUCCESS")
 }
