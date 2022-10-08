@@ -3,11 +3,13 @@ package com.elliottsoftware.calfbook.presentation.fragments
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.*
-import androidx.core.view.MenuHost
-import androidx.core.view.MenuProvider
+import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.material.Scaffold
+import androidx.compose.material.rememberScaffoldState
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,12 +17,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.elliottsoftware.calfbook.R
 import com.elliottsoftware.calfbook.databinding.FragmentMainBinding
 import com.elliottsoftware.calfbook.domain.models.firebase.FireBaseCalf
+import com.elliottsoftware.calfbook.presentation.navigationDrawer.AppBar
 import com.elliottsoftware.calfbook.presentation.recyclerViews.CalfListAdapter
 import com.elliottsoftware.calfbook.presentation.recyclerViews.FirestoreAdapter
-import com.elliottsoftware.calfbook.util.CalfApplication
-import com.elliottsoftware.calfbook.util.SwipeToDelete
 import com.elliottsoftware.calfbook.presentation.viewModles.CalfViewModel
 import com.elliottsoftware.calfbook.presentation.viewModles.CalfViewModelFactory
+import com.elliottsoftware.calfbook.util.CalfApplication
+import com.elliottsoftware.calfbook.util.SwipeToDelete
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
@@ -28,12 +31,13 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.launch
 
 
 /**
  * A simple [Fragment] subclass.
  */
-class MainFragment : Fragment(),CalfListAdapter.OnCalfListener, MenuProvider {
+class MainFragment : Fragment(),CalfListAdapter.OnCalfListener {
     private  var _binding:FragmentMainBinding? = null
     //this property is only valid between onCreateView on onDestroy
     private val binding get() = _binding!!
@@ -63,10 +67,36 @@ class MainFragment : Fragment(),CalfListAdapter.OnCalfListener, MenuProvider {
         // Inflate the layout for this fragment
         _binding = FragmentMainBinding.inflate(layoutInflater)
         recyclerView = binding.recyclerview
-        val menuHost: MenuHost = requireActivity()
-        menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
+
         val  view = binding.root
         fabButton = binding.fab
+        (activity as AppCompatActivity?)!!.supportActionBar!!.hide()
+
+        binding.composeView.apply {
+            //A strategy for managing the underlying Composition of Compose UI
+            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+
+            setContent {
+                val scaffoldState = rememberScaffoldState()
+                val scope = rememberCoroutineScope()
+                Scaffold(
+                    scaffoldState = scaffoldState,
+                    topBar = {
+                        AppBar(onNavigationIconClick = {
+                            scope.launch {
+                                scaffoldState.drawerState.open()
+                            }
+
+                        })
+                    }
+                ) {
+
+                }
+
+
+            }
+        }
+
         return view;
 
     }
@@ -118,24 +148,24 @@ class MainFragment : Fragment(),CalfListAdapter.OnCalfListener, MenuProvider {
 
     }
 
-    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-        menuInflater.inflate(R.menu.main_menu,menu)
-
-
-    }
-
-    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-
-        return when (menuItem.itemId) {
-            R.id.logout -> {
-                auth.signOut()
-                Navigation.findNavController(view!!).navigate(R.id.action_mainFragment_to_login)
-                true
-            }
-            else -> return false
-        }
-
-    }
+//    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+//        menuInflater.inflate(R.menu.main_menu,menu)
+//
+//
+//    }
+//
+//    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+//
+//        return when (menuItem.itemId) {
+//            R.id.logout -> {
+//                auth.signOut()
+//                Navigation.findNavController(view!!).navigate(R.id.action_mainFragment_to_login)
+//                true
+//            }
+//            else -> return false
+//        }
+//
+//    }
 
 
 

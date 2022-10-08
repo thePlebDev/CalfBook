@@ -35,6 +35,7 @@ class LoginViewModel(
         private set
 
 
+
     fun updateEmail(email:String){
         state = state.copy(email = email)
     }
@@ -51,7 +52,6 @@ class LoginViewModel(
         }
     }
      fun submitData(){
-         Log.e("CALL","CALLED")
          val emailResult = validateEmail.execute(state.email)
          val passwordResult = validatePassword.execute(state.password)
          val hasError = listOf(
@@ -63,7 +63,6 @@ class LoginViewModel(
                  emailError = emailResult.errorMessage,
                  passwordError = passwordResult.errorMessage
              )
-             Log.e("CALL","ERROR")
 
              return
          }else{
@@ -75,11 +74,8 @@ class LoginViewModel(
          }
          signInWithFireBase(state.email,state.password)
 
-
-
-
-
     }
+
 
     fun passwordIconChecked(checked:Boolean){
         state = state.copy(passwordIconChecked= checked)
