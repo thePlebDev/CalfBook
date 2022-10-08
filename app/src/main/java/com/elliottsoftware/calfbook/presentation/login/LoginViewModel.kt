@@ -5,15 +5,19 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.elliottsoftware.calfbook.domain.models.FormValidationResult
 import com.elliottsoftware.calfbook.domain.models.Response
+import com.elliottsoftware.calfbook.domain.use_cases.IsUserAuthenticated
+import com.elliottsoftware.calfbook.domain.use_cases.SignUserInUseCase
 import com.elliottsoftware.calfbook.domain.use_cases.ValidateEmail
 import com.elliottsoftware.calfbook.domain.use_cases.ValidatePassword
 import com.elliottsoftware.calfbook.domain.use_cases.auth.AuthUseCases
 import com.elliottsoftware.calfbook.domain.use_cases.auth.LoginUser
 import com.elliottsoftware.calfbook.domain.use_cases.auth.LogoutUser
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
@@ -21,9 +25,7 @@ import kotlinx.coroutines.launch
 class LoginViewModel(
     private val validateEmail: ValidateEmail = ValidateEmail(),
     private val validatePassword: ValidatePassword = ValidatePassword(),
-    private val loginUser: LoginUser = LoginUser(),
-    private val logoutUser: LogoutUser = LogoutUser(),
-    private val authUseCases: AuthUseCases = AuthUseCases(loginUser,logoutUser)
+    private val signUserInUseCase: SignUserInUseCase = SignUserInUseCase()
 ): ViewModel() {
 
     //todo: THIS NEEDS TO BE CHANGED
@@ -40,9 +42,13 @@ class LoginViewModel(
         state = state.copy(password = password)
     }
 
-    fun signInWithFireBase(){
+    fun signInWithFireBase(email:String,password: String) = viewModelScope.launch{
         //todo make an actual call to the data layer through the use case
-        signInWithFirebaseResponse = Response.Loading
+        //signInWithFirebaseResponse = signUserInUseCase(email,password)
+        signUserInUseCase(email,password).collect{response ->
+            signInWithFirebaseResponse = response
+
+        }
     }
      fun submitData(){
          Log.e("CALL","CALLED")
@@ -67,7 +73,8 @@ class LoginViewModel(
                  passwordError = null
              )
          }
-         Log.e("CALL","no error")
+         signInWithFireBase(state.email,state.password)
+
 
 
 
