@@ -109,17 +109,28 @@ class MainFragment : Fragment() {
                                 icon = Icons.Default.Home
                             ),
                             MenuItem(
-                                id = "Weather",
+                                id = "weather",
                                 title="Weather",
                                 contentDescription = "Go to weather screen",
                                 icon = Icons.Default.Terrain
                             )
 
-                        ), onItemClick = {})
+                        ), onItemClick = {
+                            when(it.id){
+                                "weather" ->{
+                                    scope.launch {
+                                        scaffoldState.drawerState.close()
+                                        Navigation.findNavController(binding.root).navigate(R.id.action_mainFragment_to_weather)
+                                    }
+
+                                }
+                            }
+                        })
                     }
                 ) {
 
                 }
+
 
 
             }
