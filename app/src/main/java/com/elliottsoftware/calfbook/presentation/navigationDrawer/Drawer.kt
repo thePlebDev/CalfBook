@@ -10,8 +10,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 
 class Drawer {
 }
@@ -21,19 +23,20 @@ fun DrawerHeader(){
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 64.dp),
+            .padding(vertical = 24.dp),
         contentAlignment = Alignment.Center
     ){
-        Text(text = "Header",fontSize=60.sp)
+        Text(text = "Calf Tracker",fontSize=40.sp, textAlign = TextAlign.Center)
     }
 }
 
 @Composable
 fun DrawerBody(
     items:List<MenuItem>,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier.zIndex(9999f),
     itemTextStyle: TextStyle = TextStyle(fontSize = 18.sp),
-    onItemClick:(MenuItem) -> Unit
+    onItemClick:(MenuItem) -> Unit,
+
 ){
     LazyColumn(modifier){
         items(items){item ->

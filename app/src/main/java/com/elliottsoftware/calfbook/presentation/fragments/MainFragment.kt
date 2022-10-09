@@ -4,10 +4,13 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.material.Scaffold
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.zIndex
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
@@ -18,6 +21,9 @@ import com.elliottsoftware.calfbook.R
 import com.elliottsoftware.calfbook.databinding.FragmentMainBinding
 import com.elliottsoftware.calfbook.domain.models.firebase.FireBaseCalf
 import com.elliottsoftware.calfbook.presentation.navigationDrawer.AppBar
+import com.elliottsoftware.calfbook.presentation.navigationDrawer.DrawerBody
+import com.elliottsoftware.calfbook.presentation.navigationDrawer.DrawerHeader
+import com.elliottsoftware.calfbook.presentation.navigationDrawer.MenuItem
 import com.elliottsoftware.calfbook.presentation.recyclerViews.CalfListAdapter
 import com.elliottsoftware.calfbook.presentation.recyclerViews.FirestoreAdapter
 import com.elliottsoftware.calfbook.presentation.viewModles.CalfViewModel
@@ -37,7 +43,7 @@ import kotlinx.coroutines.launch
 /**
  * A simple [Fragment] subclass.
  */
-class MainFragment : Fragment(),CalfListAdapter.OnCalfListener {
+class MainFragment : Fragment() {
     private  var _binding:FragmentMainBinding? = null
     //this property is only valid between onCreateView on onDestroy
     private val binding get() = _binding!!
@@ -50,7 +56,7 @@ class MainFragment : Fragment(),CalfListAdapter.OnCalfListener {
         CalfViewModelFactory((activity?.application as CalfApplication).repository)
     }
     private lateinit var adapter: FirestoreAdapter
-    private lateinit var recyclerView: RecyclerView
+    //private lateinit var recyclerView: RecyclerView
 
 
 
@@ -66,10 +72,10 @@ class MainFragment : Fragment(),CalfListAdapter.OnCalfListener {
     ): View? {
         // Inflate the layout for this fragment
         _binding = FragmentMainBinding.inflate(layoutInflater)
-        recyclerView = binding.recyclerview
+//        recyclerView = binding.recyclerview
 
         val  view = binding.root
-        fabButton = binding.fab
+//        fabButton = binding.fab
         (activity as AppCompatActivity?)!!.supportActionBar!!.hide()
 
         binding.composeView.apply {
@@ -80,14 +86,36 @@ class MainFragment : Fragment(),CalfListAdapter.OnCalfListener {
                 val scaffoldState = rememberScaffoldState()
                 val scope = rememberCoroutineScope()
                 Scaffold(
+
                     scaffoldState = scaffoldState,
                     topBar = {
-                        AppBar(onNavigationIconClick = {
-                            scope.launch {
-                                scaffoldState.drawerState.open()
-                            }
+                             AppBar(
+                                 onNavigationIconClick = {
+                                     scope.launch {
+                                         scaffoldState.drawerState.open()
+                                     }
 
-                        })
+
+                                 }
+                             )
+                    },
+                    drawerContent = {
+                        DrawerHeader()
+                        DrawerBody(items = listOf(
+                            MenuItem(
+                                id = "home",
+                                title="Home",
+                                contentDescription = "Go to home screen",
+                                icon = Icons.Default.Home
+                            ),
+                            MenuItem(
+                                id = "Weather",
+                                title="Weather",
+                                contentDescription = "Go to weather screen",
+                                icon = Icons.Default.Terrain
+                            )
+
+                        ), onItemClick = {})
                     }
                 ) {
 
@@ -101,24 +129,10 @@ class MainFragment : Fragment(),CalfListAdapter.OnCalfListener {
 
     }
 
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
-        setUpRecyclerView();
-
-
-
-        fabButton.setOnClickListener{
-            Navigation.findNavController(it).navigate(R.id.action_mainFragment_to_createCalf)
-        }
-
-       ItemTouchHelper(SwipeToDelete(adapter)).attachToRecyclerView(recyclerView)
-
-        val orientation:Int = resources.configuration.orientation
-        if(orientation == Configuration.ORIENTATION_LANDSCAPE){
-            fabButton.hide()
-        }
 
 
 
@@ -134,59 +148,5 @@ class MainFragment : Fragment(),CalfListAdapter.OnCalfListener {
     }
 
 
-    /**
-     * method from [CalfListAdapter.OnCalfListener] used to navigate to [UpdateCalfFragment]
-     * @param[calfId] the unique identifier of the calf
-     *
-     * @return
-     */
-    override fun onCalfClick(calfId: Long) {
-        //allCalves.value?.get(position) //index of the current calf
-        val action = MainFragmentDirections.actionMainFragmentToEditCalf(calfId)
 
-        Navigation.findNavController(binding.root).navigate(action)
-
-    }
-
-//    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-//        menuInflater.inflate(R.menu.main_menu,menu)
-//
-//
-//    }
-//
-//    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-//
-//        return when (menuItem.itemId) {
-//            R.id.logout -> {
-//                auth.signOut()
-//                Navigation.findNavController(view!!).navigate(R.id.action_mainFragment_to_login)
-//                true
-//            }
-//            else -> return false
-//        }
-//
-//    }
-
-
-
-
-    private fun setUpRecyclerView():Unit{
-         val options: FirestoreRecyclerOptions<FireBaseCalf> = FirestoreRecyclerOptions.Builder<FireBaseCalf>()
-            .setQuery(collectionRef, FireBaseCalf::class.java)
-            .build()
-        adapter = FirestoreAdapter(options)
-        recyclerView.layoutManager = LinearLayoutManager(activity)
-        recyclerView.adapter = adapter
-
-    }
-
-    override fun onStart() {
-        super.onStart()
-        adapter.startListening();
-    }
-
-    override fun onStop() {
-        super.onStop()
-        adapter.stopListening()
-    }
 }
