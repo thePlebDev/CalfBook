@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_mainFragment_to_login"
             app:destination="@id/login" />
+        <action
+            android:id="@+id/action_mainFragment_to_weather"
+            app:destination="@id/weather" />
     </fragment>
     <fragment
         android:id="@+id/createCalf"
@@ -78,4 +81,13 @@
         android:id="@+id/forgotPassword2"
         android:name="com.elliottsoftware.calfbook.presentation.fragments.ForgotPassword"
         android:label="ForgotPassword" />
+    <fragment
+        android:id="@+id/weather"
+        android:name="com.elliottsoftware.calfbook.presentation.fragments.Weather"
+        android:label="fragment_weather"
+        tools:layout="@layout/fragment_weather" >
+        <action
+            android:id="@+id/action_weather_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </fragment>
 </navigation>
