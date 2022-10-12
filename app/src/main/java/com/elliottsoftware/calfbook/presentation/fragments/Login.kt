@@ -147,29 +147,29 @@ class Login : Fragment(), View.OnClickListener{
 
     }
 
-    private fun signinUser(email:String,password:String){
-        activity?.let {
-            auth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(it) { task ->
-                    if (task.isSuccessful) {
-                        progressBar.visibility = View.INVISIBLE
-                        // Sign in success, update UI with the signed-in user's information
-
-                        Navigation.findNavController(view!!).navigate(LoginDirections.actionLoginToMainFragment())
-                        //it.supportFragmentManager.popBackStack()
-
-                        val user = auth.currentUser
-
-                    } else {
-                        // If sign in fails, display a message to the user.
-                        progressBar.visibility = View.INVISIBLE
-                        val snackBar = Snackbar.make(view!!,"Authentication failed", Snackbar.LENGTH_LONG)
-                        snackBar.setAction("DISMISS", SnackBarActions(snackBar))
-                        snackBar.show()
-
-                    }
-                }
-        }
-    }
+//    private fun signinUser(email:String,password:String){
+//        activity?.let {
+//            auth.signInWithEmailAndPassword(email, password)
+//                .addOnCompleteListener(it) { task ->
+//                    if (task.isSuccessful) {
+//                        progressBar.visibility = View.INVISIBLE
+//                        // Sign in success, update UI with the signed-in user's information
+//
+//                        Navigation.findNavController(view!!).navigate(LoginDirections.actionLoginToMainFragment())
+//                        //it.supportFragmentManager.popBackStack()
+//
+//                        val user = auth.currentUser
+//
+//                    } else {
+//                        // If sign in fails, display a message to the user.
+//                        progressBar.visibility = View.INVISIBLE
+//                        val snackBar = Snackbar.make(view!!,"Authentication failed", Snackbar.LENGTH_LONG)
+//                        snackBar.setAction("DISMISS", SnackBarActions(snackBar))
+//                        snackBar.show()
+//
+//                    }
+//                }
+//        }
+//    }
 
 }

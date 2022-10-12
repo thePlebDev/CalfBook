@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.elliottsoftware.calfbook">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:name=".util.CalfApplication"
         android:allowBackup="true"
