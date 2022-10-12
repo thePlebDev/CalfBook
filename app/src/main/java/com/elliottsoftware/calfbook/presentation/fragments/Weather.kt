@@ -7,21 +7,28 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Terrain
 import androidx.compose.material.rememberScaffoldState
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.elliottsoftware.calfbook.R
@@ -30,7 +37,12 @@ import com.elliottsoftware.calfbook.data.remote.PostRetrofitInstance
 import com.elliottsoftware.calfbook.data.remote.PostViewModel
 import com.elliottsoftware.calfbook.data.remote.RetrofitInstance
 import com.elliottsoftware.calfbook.databinding.FragmentWeatherBinding
+import com.elliottsoftware.calfbook.domain.models.PostResponse
+import com.elliottsoftware.calfbook.domain.models.Response2
 import com.elliottsoftware.calfbook.presentation.components.PostCard
+import com.elliottsoftware.calfbook.presentation.login.Fail
+import com.elliottsoftware.calfbook.presentation.login.LinearLoadingBar
+import com.elliottsoftware.calfbook.presentation.login.Success
 import com.elliottsoftware.calfbook.presentation.navigationDrawer.AppBar
 import com.elliottsoftware.calfbook.presentation.navigationDrawer.DrawerBody
 import com.elliottsoftware.calfbook.presentation.navigationDrawer.DrawerHeader
@@ -55,6 +67,7 @@ private const val ARG_PARAM2 = "param2"
 class Weather : Fragment() {
     private var _binding:FragmentWeatherBinding? = null
     private val binding get() = _binding!!
+    //private val viewModel:PostViewModel =  viewModel()
 
     //private lateinit var todoAdapter: PostAdapter
 
@@ -128,7 +141,7 @@ class Weather : Fragment() {
                                     "home" ->{
                                         scope.launch {
                                             scaffoldState.drawerState.close()
-                                            Navigation.findNavController(binding.root).navigate(R.id.action_mainFragment_to_weather)
+                                            Navigation.findNavController(binding.root).navigate(R.id.action_weather_to_mainFragment)
                                         }
 
                                     }
@@ -137,65 +150,37 @@ class Weather : Fragment() {
                         }
 
                     ) {
-//                        binding.progressBar.isVisible = true;
-//                        //setupRecyclerView()
-//                        lifecycleScope.launchWhenCreated {
 //
-//                            val response = try {
-//                                val postViewModel = PostViewModel()
-//                                postViewModel.getPosts()
+//                        val postList = listOf(
+//                            Post(title = "MEATBALL", id = 1, body = "", userId = 1),
+//                            Post(title = "TINY", id = 2, body = "", userId = 2),
+//                            Post(title = "ANOTHER", id = 3, body = "", userId = 3),
+//                            Post(title = "MEATBALL", id = 1, body = "", userId = 1),
+//                            Post(title = "TINY", id = 2, body = "", userId = 2),
+//                            Post(title = "ANOTHER", id = 3, body = "", userId = 3),
+//                            Post(title = "MEATBALL", id = 1, body = "", userId = 1),
+//                            Post(title = "TINY", id = 2, body = "", userId = 2),
+//                            Post(title = "ANOTHER", id = 3, body = "", userId = 3),
+//                            Post(title = "MEATBALL", id = 1, body = "", userId = 1),
+//                            Post(title = "TINY", id = 2, body = "", userId = 2),
+//                            Post(title = "ANOTHER", id = 3, body = "", userId = 3),
+//                            Post(title = "MEATBALL", id = 1, body = "", userId = 1),
+//                            Post(title = "TINY", id = 2, body = "", userId = 2),
+//                            Post(title = "ANOTHER", id = 3, body = "", userId = 3),
+//                            Post(title = "MEATBALL", id = 1, body = "", userId = 1),
+//                            Post(title = "TINY", id = 2, body = "", userId = 2),
+//                            Post(title = "ANOTHER", id = 3, body = "", userId = 3),
+//                            Post(title = "MEATBALL", id = 1, body = "", userId = 1),
+//                            Post(title = "TINY", id = 2, body = "", userId = 2),
+//                            Post(title = "ANOTHER", id = 3, body = "", userId = 3)
+//                        )
 //
-//                            } catch(e: IOException) {
-//                                Log.e("TAG", "IOException, you might not have internet connection")
-//                                binding.progressBar.isVisible = false
-//                                return@launchWhenCreated
-//                            } catch (e: HttpException) {
-//                                Log.e("TAG", "HttpException, unexpected response")
-//                                binding.progressBar.isVisible = false
-//                                return@launchWhenCreated
+//                        LazyColumn{
+//                            items(postList){post ->
+//                                PostCard(post = post)
 //                            }
-//
-//                            if(response.isSuccessful && response.body() != null) {
-//                               // todoAdapter.posts = response.body()!!
-//                                val postList:List<Post> = response.body()!!
-//
-//
-//
-//                            } else {
-//                                Log.e("TAG", "Response not successful")
-//                            }
-//                            binding.progressBar.isVisible = false
 //                        }
-                        val postList = listOf(
-                            Post(title = "MEATBALL", id = 1, body = "", userId = 1),
-                            Post(title = "TINY", id = 2, body = "", userId = 2),
-                            Post(title = "ANOTHER", id = 3, body = "", userId = 3),
-                            Post(title = "MEATBALL", id = 1, body = "", userId = 1),
-                            Post(title = "TINY", id = 2, body = "", userId = 2),
-                            Post(title = "ANOTHER", id = 3, body = "", userId = 3),
-                            Post(title = "MEATBALL", id = 1, body = "", userId = 1),
-                            Post(title = "TINY", id = 2, body = "", userId = 2),
-                            Post(title = "ANOTHER", id = 3, body = "", userId = 3),
-                            Post(title = "MEATBALL", id = 1, body = "", userId = 1),
-                            Post(title = "TINY", id = 2, body = "", userId = 2),
-                            Post(title = "ANOTHER", id = 3, body = "", userId = 3),
-                            Post(title = "MEATBALL", id = 1, body = "", userId = 1),
-                            Post(title = "TINY", id = 2, body = "", userId = 2),
-                            Post(title = "ANOTHER", id = 3, body = "", userId = 3),
-                            Post(title = "MEATBALL", id = 1, body = "", userId = 1),
-                            Post(title = "TINY", id = 2, body = "", userId = 2),
-                            Post(title = "ANOTHER", id = 3, body = "", userId = 3),
-                            Post(title = "MEATBALL", id = 1, body = "", userId = 1),
-                            Post(title = "TINY", id = 2, body = "", userId = 2),
-                            Post(title = "ANOTHER", id = 3, body = "", userId = 3)
-                        )
-                        
-                        LazyColumn{
-                            items(postList){post ->
-                                PostCard(post = post)
-                            }
-                        }
-                        
+                        LoadingIndicator()
 
                     }
 
@@ -211,6 +196,31 @@ class Weather : Fragment() {
 
 
 
+    @Composable
+    fun LoadingIndicator(viewModel: PostViewModel = viewModel()){
+        when(val response = viewModel.loadingResponse){
+            is PostResponse.Loading -> {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    CircularProgressIndicator()
+                }
+            }
+            is PostResponse.Success -> {
+                if(response.data){
+                    //THIS IS WHERE WE WOULD DO THE NAVIGATION
+                    //Success()
+                }
+            }
+            is PostResponse.Failure -> {
+                //should probably show a snackbar
+                //Fail()
+                Log.d("Login Error",response.e.message.toString())
+            }
+        }
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
