@@ -1,4 +1,6 @@
 package com.elliottsoftware.calfbook.domain.weather
 
-class NetworkResponse {
+class NetworkResponse(
+
+) {
 }

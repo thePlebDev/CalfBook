@@ -1,4 +1,8 @@
 package com.elliottsoftware.calfbook.data.remote
 
-class Todo {
-}
+data class Todo(
+    val completed:Boolean,
+    val id:Int,
+    val title:String,
+    val userId:Int
+)
