@@ -1,4 +1,4 @@
 package com.elliottsoftware.calfbook.data.remote
 
-class WeatherAPI {
+class RetrofitInstance {
 }
