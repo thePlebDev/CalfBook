@@ -1,13 +1,13 @@
 package com.elliottsoftware.calfbook.domain.models
 
-sealed class Response<out T> {
-    object Loading: Response<Nothing>()
+sealed class PostResponse<out T> {
+    object Loading: PostResponse<Nothing>()
 
     data class Success<out T>(
         val data: T
-    ): Response<T>()
+    ): PostResponse<T>()
 
     data class Failure(
         val e: Exception
-    ): Response<Nothing>()
+    ): PostResponse<Nothing>()
 }

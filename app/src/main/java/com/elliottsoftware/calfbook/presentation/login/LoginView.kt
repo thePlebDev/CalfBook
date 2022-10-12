@@ -20,8 +20,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.elliottsoftware.calfbook.domain.models.Response
+import com.elliottsoftware.calfbook.domain.models.Response2
 import com.firebase.ui.auth.R
 
 @Composable
@@ -136,14 +135,14 @@ fun SignInWithFirebase(viewModel: LoginViewModel){
         Text(text = "Login",fontSize = 26.sp)
     }
     when(val response = viewModel.signInWithFirebaseResponse){
-        is Response.Loading -> LinearLoadingBar()
-        is Response.Success -> {
+        is Response2.Loading -> LinearLoadingBar()
+        is Response2.Success -> {
             if(response.data){
                 //THIS IS WHERE WE WOULD DO THE NAVIGATION
                 Success()
             }
         }
-        is Response.Failure -> {
+        is Response2.Failure -> {
             //should probably show a snackbar
             Fail()
             Log.d("Login Error",response.e.message.toString())

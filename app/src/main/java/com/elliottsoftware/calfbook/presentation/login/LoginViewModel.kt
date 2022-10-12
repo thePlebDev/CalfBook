@@ -1,24 +1,14 @@
 package com.elliottsoftware.calfbook.presentation.login
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.elliottsoftware.calfbook.domain.models.FormValidationResult
-import com.elliottsoftware.calfbook.domain.models.Response
-import com.elliottsoftware.calfbook.domain.use_cases.IsUserAuthenticated
+import com.elliottsoftware.calfbook.domain.models.Response2
 import com.elliottsoftware.calfbook.domain.use_cases.SignUserInUseCase
 import com.elliottsoftware.calfbook.domain.use_cases.ValidateEmail
 import com.elliottsoftware.calfbook.domain.use_cases.ValidatePassword
-import com.elliottsoftware.calfbook.domain.use_cases.auth.AuthUseCases
-import com.elliottsoftware.calfbook.domain.use_cases.auth.LoginUser
-import com.elliottsoftware.calfbook.domain.use_cases.auth.LogoutUser
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 //TODO: add hilt
@@ -31,7 +21,7 @@ class LoginViewModel(
     //todo: THIS NEEDS TO BE CHANGED
     var state by mutableStateOf(LoginFormState())
 
-    var signInWithFirebaseResponse by mutableStateOf<Response<Boolean>>(Response.Success(false))
+    var signInWithFirebaseResponse by mutableStateOf<Response2<Boolean>>(Response2.Success(false))
         private set
 
 
