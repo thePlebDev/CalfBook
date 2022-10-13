@@ -49,6 +49,7 @@ import com.elliottsoftware.calfbook.presentation.navigationDrawer.DrawerHeader
 import com.elliottsoftware.calfbook.presentation.navigationDrawer.MenuItem
 import com.elliottsoftware.calfbook.presentation.recyclerViews.PostAdapter
 import com.elliottsoftware.calfbook.presentation.recyclerViews.TodoAdapter
+import com.elliottsoftware.calfbook.presentation.weather.WeatherUIState
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
@@ -67,6 +68,7 @@ private const val ARG_PARAM2 = "param2"
 class Weather : Fragment() {
     private var _binding:FragmentWeatherBinding? = null
     private val binding get() = _binding!!
+
     //private val viewModel:PostViewModel =  viewModel()
 
     //private lateinit var todoAdapter: PostAdapter
@@ -150,37 +152,8 @@ class Weather : Fragment() {
                         }
 
                     ) {
-//
-//                        val postList = listOf(
-//                            Post(title = "MEATBALL", id = 1, body = "", userId = 1),
-//                            Post(title = "TINY", id = 2, body = "", userId = 2),
-//                            Post(title = "ANOTHER", id = 3, body = "", userId = 3),
-//                            Post(title = "MEATBALL", id = 1, body = "", userId = 1),
-//                            Post(title = "TINY", id = 2, body = "", userId = 2),
-//                            Post(title = "ANOTHER", id = 3, body = "", userId = 3),
-//                            Post(title = "MEATBALL", id = 1, body = "", userId = 1),
-//                            Post(title = "TINY", id = 2, body = "", userId = 2),
-//                            Post(title = "ANOTHER", id = 3, body = "", userId = 3),
-//                            Post(title = "MEATBALL", id = 1, body = "", userId = 1),
-//                            Post(title = "TINY", id = 2, body = "", userId = 2),
-//                            Post(title = "ANOTHER", id = 3, body = "", userId = 3),
-//                            Post(title = "MEATBALL", id = 1, body = "", userId = 1),
-//                            Post(title = "TINY", id = 2, body = "", userId = 2),
-//                            Post(title = "ANOTHER", id = 3, body = "", userId = 3),
-//                            Post(title = "MEATBALL", id = 1, body = "", userId = 1),
-//                            Post(title = "TINY", id = 2, body = "", userId = 2),
-//                            Post(title = "ANOTHER", id = 3, body = "", userId = 3),
-//                            Post(title = "MEATBALL", id = 1, body = "", userId = 1),
-//                            Post(title = "TINY", id = 2, body = "", userId = 2),
-//                            Post(title = "ANOTHER", id = 3, body = "", userId = 3)
-//                        )
-//
-//                        LazyColumn{
-//                            items(postList){post ->
-//                                PostCard(post = post)
-//                            }
-//                        }
-                        LoadingIndicator()
+
+                        LoadTest()
 
                     }
 
@@ -194,32 +167,34 @@ class Weather : Fragment() {
         return view
     }
 
+    @Composable
+    fun LoadTest(viewModel: PostViewModel = viewModel()){
+        val state = viewModel.state
+        LoadingIndicator(viewModel,state)
+    }
 
 
     @Composable
-    fun LoadingIndicator(viewModel: PostViewModel = viewModel()){
-        when(val response = viewModel.loadingResponse){
-            is PostResponse.Loading -> {
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    CircularProgressIndicator()
-                }
+    fun LoadingIndicator(viewModel: PostViewModel,state:WeatherUIState){
+        viewModel.getPosts()
+
+        if(state.isLoading){
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                CircularProgressIndicator()
             }
-            is PostResponse.Success -> {
-                if(response.data){
-                    //THIS IS WHERE WE WOULD DO THE NAVIGATION
-                    //Success()
+        }else{
+            Log.d("meatball",state.postList?.size.toString())
+            LazyColumn{
+                items(state.postList!!){post ->
+                    PostCard(post = post)
                 }
-            }
-            is PostResponse.Failure -> {
-                //should probably show a snackbar
-                //Fail()
-                Log.d("Login Error",response.e.message.toString())
             }
         }
+
     }
 
     override fun onDestroyView() {

@@ -147,6 +147,7 @@ fun SignInWithFirebase(viewModel: LoginViewModel){
             Fail()
             Log.d("Login Error",response.e.message.toString())
         }
+        else -> {}
     }
 }
 @Composable

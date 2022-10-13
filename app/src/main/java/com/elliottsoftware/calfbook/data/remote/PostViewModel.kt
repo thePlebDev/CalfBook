@@ -11,24 +11,38 @@ import androidx.lifecycle.viewModelScope
 import com.elliottsoftware.calfbook.domain.models.PostResponse
 import com.elliottsoftware.calfbook.domain.models.Response2
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.elliottsoftware.calfbook.domain.use_cases.GetPostsUseCase
+import com.elliottsoftware.calfbook.presentation.login.LoginFormState
+import com.elliottsoftware.calfbook.presentation.weather.WeatherUIState
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import retrofit2.Response
 
 
-class PostViewModel:ViewModel() {
+class PostViewModel(
+    private val getPostsUseCase: GetPostsUseCase = GetPostsUseCase()
+):ViewModel() {
+    var state by mutableStateOf(WeatherUIState())
 
     var loadingResponse by mutableStateOf<PostResponse<Boolean>>(PostResponse.Loading)
     private set
 
 
 
+    fun getPosts() = viewModelScope.launch {
+        val posts = getPostsUseCase()
+        state = state.copy(
+            isLoading = false,
+            postList = posts
 
-   suspend fun getPosts(): Response<List<Post>> {
-        val posts = viewModelScope.async {
-          PostRetrofitInstance.api.getPosts()
-        }
-       return posts.await()
+        )
+
+
+    }
+
+    private fun updateLoadingState(loadingState:Boolean){
+        state = state.copy(isLoading = loadingState)
+
     }
 
 
