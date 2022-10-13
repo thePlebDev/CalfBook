@@ -27,17 +27,25 @@ class PostViewModel(
     var loadingResponse by mutableStateOf<PostResponse<Boolean>>(PostResponse.Loading)
     private set
 
+    var postResponse by mutableStateOf<PostResponse<List<Post>>>(PostResponse.Loading)
+        private set
 
 
-    fun getPosts() = viewModelScope.launch {
-        val posts = getPostsUseCase()
-        state = state.copy(
-            isLoading = false,
-            postList = posts
 
-        )
-
-
+//    fun getPosts() = viewModelScope.launch {
+//        val posts = getPostsUseCase()
+//        state = state.copy(
+//            isLoading = false,
+//            postList = posts
+//
+//        )
+//
+//
+//    }
+    fun getPosts2() = viewModelScope.launch {
+        getPostsUseCase().collect{ postData ->
+            postResponse = postData
+        }
     }
 
     private fun updateLoadingState(loadingState:Boolean){

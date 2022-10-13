@@ -176,24 +176,31 @@ class Weather : Fragment() {
 
     @Composable
     fun LoadingIndicator(viewModel: PostViewModel,state:WeatherUIState){
-        viewModel.getPosts()
-
-        if(state.isLoading){
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                CircularProgressIndicator()
-            }
-        }else{
-            Log.d("meatball",state.postList?.size.toString())
-            LazyColumn{
-                items(state.postList!!){post ->
-                    PostCard(post = post)
+        viewModel.getPosts2()
+        when(val response = viewModel.postResponse){
+            is PostResponse.Loading -> {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    CircularProgressIndicator()
                 }
             }
+            is PostResponse.Success ->{
+                LazyColumn{
+                    items(response.data){post ->
+                        PostCard(post = post)
+                    }
+                }
+
+            }
+            is PostResponse.Failure ->{
+                Text(text = response.e)
+            }
         }
+
+
 
     }
 

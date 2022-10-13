@@ -8,6 +8,6 @@ sealed class PostResponse<out T> {
     ): PostResponse<T>()
 
     data class Failure(
-        val e: Exception
+        val e: String
     ): PostResponse<Nothing>()
 }
